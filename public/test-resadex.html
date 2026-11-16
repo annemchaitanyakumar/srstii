@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Resadex Water Test</title>
+<style>
+html,body{height:100%;margin:0;overflow:hidden;background:#b9d6a8}
+#water{position:absolute;inset:0;width:100%;height:100%;display:block}
+</style>
+</head>
+<body>
+  <canvas id="water"></canvas>
+<script>
+(function(){
+  var c=document.getElementById('water'),gl=c.getContext('webgl');
+  if(!gl){c.style.background='radial-gradient(ellipse at 50% 50%,#dfe5ee,#8fa0ba)';return;}
+  var vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  var fs=`precision highp float;uniform vec2 R;uniform float T;
+float ph,pr,DY,JK,AF,SY;vec2 IC;vec3 DC;
+vec3 LD(){return normalize(vec3(-.35,.7,.5));}
+float H(vec2 p){
+ float d=length(p);float a=atan(p.y,p.x+1e-4);
+ float e1=length(p-IC);float w=e1-(pr*6.+.2);
+ d+=(.03*sin(a*3.+T*.2)+.02*sin(a*5.-T*.3+1.))*smoothstep(.3,2.,d);
+ float h=cos(pow(d+.001,.85)*3.4-T*1.1)*(.5+.5*exp(-d*.2))*smoothstep(.1,1.6,d);
+ h+=.3*cos(d*2.1-T*.7+1.)*exp(-d*.15)*smoothstep(.1,1.6,d);
+ h+=cos(w*4.)*exp(-w*w*.5)*(1.-pr)*step(.4,ph);
+ h+=exp(-e1*e1*10.)*(-cos(pr*9.)*exp(-pr*4.))*1.6*step(.4,ph);
+ return h*.11*AF;}
+vec3 env(vec3 r){
+ float y=clamp(r.y,-.2,1.);
+ vec3 c=mix(vec3(.5,.67,.48),vec3(.96,.99,.92),smoothstep(.28,.7,y));
+ c=mix(c,vec3(.5,.68,.46),smoothstep(.86,1.,y)*.6);
+ return c+pow(max(dot(r,LD()),0.),10.)*.15;}
+float smn(float a,float b,float k){float h=clamp(.5+.5*(b-a)/k,0.,1.);return mix(b,a,h)-k*h*(1.-h);}
+float map(vec3 p){
+ if(ph<.4){vec3 q=p-DC;q.x+=q.y*.12*sin(T*9.);float sx=1./sqrt(SY);q/=vec3(sx,SY,sx);return (length(q)-.28)*.7;}
+ return 1e3;}
+vec3 nrm(vec3 p){vec2 e=vec2(.004,0.);
+ return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx)));}
+vec3 envD(vec3 r){
+ vec3 c=env(r);
+ float bx=(1.-smoothstep(.2,.3,abs(r.x+.32)))*(1.-smoothstep(.18,.27,abs(r.y-.5)));
+ float st=(1.-smoothstep(.02,.06,abs(r.x-.62)))*(1.-smoothstep(.3,.4,abs(r.y-.45)));
+ c=mix(c,vec3(1.,1.,.96),bx*.95);
+ c=mix(c,vec3(.9,1.,.86),st*.6);
+ return mix(c,vec3(.3,.42,.28),smoothstep(.14,.02,r.y)*.7);}
+vec3 wApprox(vec2 xz){float d=length(xz);float l=mix(.5,.5+.5*cos(pow(d+.001,.85)*3.4-T*1.1),exp(-d*.3));
+ return mix(vec3(.5,.68,.47),vec3(.93,.98,.88),l);}
+vec3 dropCol(vec3 rd,vec3 n){
+ float nv=max(dot(n,-rd),0.);float F=.03+.97*pow(1.-nv,5.);
+ vec3 rf=reflect(rd,n);vec3 re=envD(rf);
+ vec3 r1=refract(rd,n,.68);vec3 ne=n-2.*dot(n,r1)*r1;
+ vec3 q=DC+ne*.28;
+ vec3 r2=refract(r1,-ne,1.47);if(dot(r2,r2)<.01)r2=reflect(r1,-ne);
+ vec3 tr;
+ float tt=-q.y/min(r2.y,-.02);tr=mix(envD(r2),wApprox((q+r2*tt).xz-IC),smoothstep(0.,-.2,r2.y));
+ float th=-.56*dot(n,r1);
+ vec3 body=tr*exp(-vec3(.1,.03,.35)*th*2.)*mix(.45,1.,smoothstep(.12,.6,nv));
+ body+=vec3(.95,1.,.7)*smoothstep(.4,.9,-n.y)*smoothstep(0.,.7,nv)*.4;
+ float sp=max(dot(rf,LD()),0.);
+ return mix(body,re,F*1.1+.04)+pow(sp,150.)*1.5;}
+void main(){
+ vec2 p=(gl_FragCoord.xy-.5*R)/R.y;
+ ph=fract(T/3.6);pr=clamp((ph-.4)/.6,0.,1.);
+ float kk=floor(T/3.6)+1.;IC=vec2(fract(sin(kk*12.9898)*43758.5453)-.5,fract(sin(kk*78.233)*12345.679)-.5)*vec2(1.5,.9);
+ float f=clamp(ph/.4,0.,1.);DY=4.6-4.3*f*f;SY=1.+.14*sin(T*13.)*(1.-.3*f)+.14*f;DC=vec3(IC.x+.12*sin(f*5.+kk)*(1.-f),DY,IC.y);JK=sin(clamp((ph-.4)/.2,0.,1.)*3.14159);
+ vec3 ro=vec3(0.,4.2,-4.4);vec3 fw=normalize(vec3(0.,0.,.2)-ro);
+ vec3 rt=normalize(cross(vec3(0.,1.,0.),fw));vec3 up=cross(fw,rt);
+ vec3 rd=normalize(fw*.85+rt*p.x+up*p.y);
+ float tw=1e4;vec3 col=vec3(.75,.88,.7);AF=1.;
+ if(rd.y<-.001){
+  float t=-ro.y/rd.y;AF=exp(-.07*max(t-7.,0.));
+  for(int i=0;i<3;i++){vec3 q=ro+rd*t;t=(ro.y-H(q.xz))/(-rd.y);}
+  tw=t;vec3 q=ro+rd*t;float e=.04+.012*t;
+  vec3 nn=normalize(vec3(-(H(q.xz+vec2(e,0.))-H(q.xz-vec2(e,0.)))/(2.*e)*1.4,1.,-(H(q.xz+vec2(0.,e))-H(q.xz-vec2(0.,e)))/(2.*e)*1.4));
+  float cv=max(dot(nn,-rd),0.);float F=.5+.5*pow(1.-cv,3.);
+  vec3 Rr=reflect(rd,nn);vec3 e0=env(Rr);
+  if(ph<.6){vec3 c=vec3(0.,ph<.4?DY+.1:.05+.9*JK,0.);vec3 oc=q-c;float bb=dot(oc,Rr);float cc=dot(oc,oc)-.25;float ds=bb*bb-cc;
+   if(ds>0.){float th=-bb-sqrt(ds);if(th>0.){vec3 hn=normalize(oc+Rr*th);e0=mix(e0,dropCol(Rr,hn),.0);}}}
+  vec3 body=vec3(.66,.8,.62)*(.8+.2*nn.y);
+  col=mix(body,e0,F)+pow(max(dot(Rr,LD()),0.),60.)*.3;
+  if(ph<.4){vec2 sc=IC+vec2(.5*DY,-.71*DY);float d2=length(q.xz-sc);
+   col*=1.-.22*exp(-d2*d2*5.);col+=vec3(1.,1.,.85)*exp(-d2*d2*40.)*.18;}
+  col=mix(col,vec3(.8,.9,.76),smoothstep(10.,26.,t)*.5);
+ }
+ if(ph<.6){float td=0.;bool hit=false;
+  for(int i=0;i<56;i++){float d=map(ro+rd*td);if(d<.003){hit=true;break;}td+=d;if(td>tw||td>30.)break;}
+  if(hit&&td<tw)col=dropCol(rd,nrm(ro+rd*td));}
+ col*=1.-.22*smoothstep(.35,1.,length(p*vec2(.8,1.1)));
+ gl_FragColor=vec4(col,1.);}`;
+  function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o;}
+  var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));
+  gl.linkProgram(pr);gl.useProgram(pr);
+  var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+  var loc=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+  var uR=gl.getUniformLocation(pr,'R'),uT=gl.getUniformLocation(pr,'T');
+  function size(){var s=Math.min(window.devicePixelRatio||1,1.25);c.width=c.clientWidth*s;c.height=c.clientHeight*s;gl.viewport(0,0,c.width,c.height);}
+  size();window.addEventListener('resize',size);
+  var t0=performance.now();
+  function f(n){gl.uniform2f(uR,c.width,c.height);gl.uniform1f(uT,(n-t0)/1000);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);requestAnimationFrame(f);}
+  requestAnimationFrame(f);
+})();
+</script>
+</body>
+</html>
