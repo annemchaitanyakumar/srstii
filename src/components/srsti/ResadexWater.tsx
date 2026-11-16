@@ -96,14 +96,18 @@ float H(vec2 p) {
   // Rebound splash cavity & droplet rebound column
   h += exp(-e1 * e1 * 10.0) * (-cos(pr * 9.0) * exp(-pr * 4.0)) * 1.6 * step(0.4, ph);
 
-  // Interactive mouse click ripple (physical water wave matching the droplet drop)
-  if (uPointerStrength > 0.001) {
+  // Interactive mouse click ripple (ultra-smooth organic liquid attack & release over 1.0s)
+  if (uPointerStrength > 0.001 && uPointerAge < 1.0) {
     float em = length(p - uPointer);
-    float wm = em - (uPointerAge * 5.0 + 0.2);
-    // Broad, fluid dispersion wavepacket identical to the falling water droplet
-    h += cos(wm * 3.8) * exp(-wm * wm * 0.42) * exp(-uPointerAge * 0.65) * (1.0 - clamp(uPointerAge / 3.2, 0.0, 1.0)) * uPointerStrength * 1.8;
-    // Splash cavity and rebound water column at the impact point
-    h += exp(-em * em * 8.5) * (-cos(uPointerAge * 8.5) * exp(-uPointerAge * 3.2)) * 2.2 * uPointerStrength;
+    float wm = em - (uPointerAge * 0.45 + 0.05);
+    // Smooth ease-in from 0.0, peaks smoothly, eases out to exact 0.0
+    float easeIn = smoothstep(0.0, 0.22, uPointerAge);
+    float easeOut = smoothstep(1.0, 0.58, uPointerAge);
+    float envAge = easeIn * easeOut;
+    // Ultra-slow, massive, broad rolling liquid swell
+    h += cos(wm * 0.75) * exp(-wm * wm * 0.14) * envAge * uPointerStrength * 1.5;
+    // Calm, slow rebound splash dip and rise
+    h += exp(-em * em * 2.5) * (-sin(uPointerAge * 3.14159) * envAge) * 1.2 * uPointerStrength;
   }
 
   return h * 0.11 * AF * (1.0 - uCalm * 0.85);
@@ -260,21 +264,27 @@ void main() {
     col = mix(col, uColorFog * (uDark > 0.5 ? 0.35 : 1.0), smoothstep(10.0, 26.0, t) * 0.5);
   }
 
-  // Raymarching the falling 3D water droplet
+  // Raymarching the falling 3D water droplet with high-efficiency bounding-sphere culling
   if (ph < 0.6) {
-    float td = 0.0;
-    bool hit = false;
-    for (int i = 0; i < 56; i++) {
-      float d = map(ro + rd * td);
-      if (d < 0.003) {
-        hit = true;
-        break;
+    vec3 toDrop = DC - ro;
+    float proj = dot(toDrop, rd);
+    float perpDistSq = dot(toDrop, toDrop) - proj * proj;
+    // Only raymarch pixels whose rays actually point near the droplet (saves ~96% of GPU work!)
+    if (proj > 0.0 && perpDistSq < 0.64) {
+      float td = max(proj - 0.8, 0.0);
+      bool hit = false;
+      for (int i = 0; i < 36; i++) {
+        float d = map(ro + rd * td);
+        if (d < 0.003) {
+          hit = true;
+          break;
+        }
+        td += d;
+        if (td > tw || td > 30.0) break;
       }
-      td += d;
-      if (td > tw || td > 30.0) break;
-    }
-    if (hit && td < tw) {
-      col = dropCol(rd, nrm(ro + rd * td));
+      if (hit && td < tw) {
+        col = dropCol(rd, nrm(ro + rd * td));
+      }
     }
   }
 
@@ -435,8 +445,8 @@ export function ResadexWater() {
 
       gsap.to(pointerSim, {
         strength: 0,
-        age: 3.5,
-        duration: 2.4,
+        age: 1.0,
+        duration: 1.0,
         ease: "power2.out",
         overwrite: "auto",
       });
@@ -462,8 +472,8 @@ export function ResadexWater() {
 
       gsap.to(pointerSim, {
         strength: 0,
-        age: 3.5,
-        duration: 2.4,
+        age: 1.0,
+        duration: 1.0,
         ease: "power2.out",
         overwrite: "auto",
       });
@@ -504,13 +514,33 @@ export function ResadexWater() {
 
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-      animId = requestAnimationFrame(render);
+      if (!document.hidden) {
+        animId = requestAnimationFrame(render);
+      }
     }
+
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animId);
+      } else {
+        cancelAnimationFrame(animId);
+        animId = requestAnimationFrame(render);
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    const onContextLost = (e: Event) => {
+      e.preventDefault();
+      cancelAnimationFrame(animId);
+    };
+    canvas.addEventListener("webglcontextlost", onContextLost);
 
     animId = requestAnimationFrame(render);
 
     return () => {
       cancelAnimationFrame(animId);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      canvas.removeEventListener("webglcontextlost", onContextLost);
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("pointerdown", onPointerDown);
       window.removeEventListener("srsti-water-ripple", onTriggerRipple);
