@@ -1,12 +1,11 @@
+import { Link } from "@tanstack/react-router";
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
-import { Flame, Plus, ScanLine } from "lucide-react";
+import { ArrowRight, Flame, Plus } from "lucide-react";
 import { useRef, useState } from "react";
 
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { formatINR, PRODUCTS, type Product } from "@/lib/srsti/products";
 import { cn } from "@/lib/utils";
 import { useCart } from "./cart";
-import { MagneticButton } from "./MagneticButton";
 import { FadeUp, SplitReveal } from "./motion";
 
 const LAYOUT: Record<string, string> = {
@@ -18,11 +17,9 @@ const LAYOUT: Record<string, string> = {
 
 function ProductCard({
   product,
-  onQuickView,
   index,
 }: {
   product: Product;
-  onQuickView: () => void;
   index: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -75,7 +72,7 @@ function ProductCard({
           my.set(0.5);
         }}
         className={cn(
-          "glass-panel group relative flex h-full flex-col overflow-hidden rounded-[2rem] p-6 md:p-8",
+          "glass-panel group relative flex h-full flex-col overflow-hidden rounded-[2rem] p-6 md:p-8 transition-shadow duration-500 hover:shadow-gold",
           hero ? "min-h-[560px] lg:min-h-[720px]" : "min-h-[440px]",
         )}
       >
@@ -96,15 +93,24 @@ function ProductCard({
           style={{ transform: "translateZ(30px)" }}
         >
           <div>
-            <p className="eyebrow">{product.volume}</p>
-            <h3
-              className={cn(
-                "mt-2 font-display font-medium leading-[1.02]",
-                hero ? "text-4xl md:text-5xl" : "text-3xl",
-              )}
+            <p className="eyebrow">{product.volume} · {product.trace.batch}</p>
+            <Link
+              to="/products/$slug"
+              params={{ slug: product.slug }}
+              className="group-hover:text-gold-ink transition-colors block"
             >
-              {product.name}
-            </h3>
+              <h3
+                className={cn(
+                  "mt-2 font-display font-medium leading-[1.02]",
+                  hero ? "text-4xl md:text-5xl" : "text-3xl",
+                )}
+              >
+                {product.name}
+              </h3>
+            </Link>
+            <p className="mt-1 font-serif text-xs italic text-muted-foreground">
+              {product.regionalName}
+            </p>
           </div>
           <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-glass-border px-3 py-1.5 text-xs">
             <Flame className="size-3.5 text-gold-ink" aria-hidden />
@@ -113,12 +119,15 @@ function ProductCard({
           </span>
         </div>
 
-        <div
+        <Link
+          to="/products/$slug"
+          params={{ slug: product.slug }}
           className={cn(
-            "relative z-10 my-4 flex flex-1 items-center justify-center",
+            "relative z-10 my-4 flex flex-1 items-center justify-center cursor-pointer",
             product.id === "groundnut" && "lg:absolute lg:inset-y-0 lg:right-6 lg:my-0 lg:w-1/2",
           )}
           style={{ transform: "translateZ(60px)" }}
+          aria-label={`View ${product.name} full details`}
         >
           <img
             src={product.image}
@@ -127,12 +136,12 @@ function ProductCard({
             width={720}
             height={926}
             className={cn(
-              "w-auto object-contain drop-shadow-2xl transition-transform duration-700 ease-silk group-hover:-translate-y-2 group-hover:scale-[1.03]",
+              "w-auto object-contain drop-shadow-2xl transition-transform duration-700 ease-silk group-hover:-translate-y-2 group-hover:scale-[1.04]",
               hero ? "max-h-[420px] lg:max-h-[520px]" : "max-h-[240px]",
               product.id === "groundnut" && "lg:max-h-[300px]",
             )}
           />
-        </div>
+        </Link>
 
         <div
           className={cn("relative z-10 mt-auto", product.id === "groundnut" && "lg:max-w-[50%]")}
@@ -149,20 +158,23 @@ function ProductCard({
             ))}
           </ul>
           <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-            <p className="font-display text-2xl">{formatINR(product.price)}</p>
+            <div>
+              <p className="font-display text-2xl font-medium">{formatINR(product.price)}</p>
+              <p className="text-[11px] font-mono text-muted-foreground">Free farm shipping eligible</p>
+            </div>
             <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={onQuickView}
-                className="inline-flex min-h-12 items-center gap-2 whitespace-nowrap rounded-full border border-foreground/20 px-4 text-sm transition-colors hover:border-gold hover:text-gold-ink"
+              <Link
+                to="/products/$slug"
+                params={{ slug: product.slug }}
+                className="inline-flex min-h-12 items-center gap-2 whitespace-nowrap rounded-full border border-foreground/20 px-5 text-sm font-medium transition-all hover:border-gold hover:bg-gold/10 hover:text-gold-ink"
               >
-                <ScanLine className="size-4" aria-hidden /> Quick view
-              </button>
+                Explore Pressing <ArrowRight className="size-4" aria-hidden />
+              </Link>
               <button
                 type="button"
                 onClick={() => add(product)}
                 aria-label={`Add ${product.name} to basket`}
-                className="liquid-btn grid size-12 place-items-center rounded-full bg-primary text-primary-foreground transition-colors hover:text-accent-foreground"
+                className="liquid-btn grid size-12 place-items-center rounded-full bg-primary text-primary-foreground transition-all hover:bg-gold hover:text-accent-foreground cursor-pointer"
               >
                 <Plus className="size-5" />
               </button>
@@ -174,98 +186,7 @@ function ProductCard({
   );
 }
 
-function QuickView({ product, onClose }: { product: Product | null; onClose: () => void }) {
-  const { add } = useCart();
-  return (
-    <Dialog open={!!product} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-h-[92svh] max-w-5xl overflow-y-auto rounded-[2rem] border-glass-border bg-background p-0 sm:rounded-[2rem]">
-        {product && (
-          <div className="grid md:grid-cols-[0.9fr_1.1fr]">
-            <div className="grain flex items-center justify-center bg-linen p-8 md:rounded-l-[2rem]">
-              <img
-                src={product.image}
-                alt={`${product.name} bottle`}
-                width={720}
-                height={926}
-                className="max-h-[380px] w-auto object-contain drop-shadow-2xl md:max-h-[520px]"
-              />
-            </div>
-            <div className="p-6 md:p-10">
-              <p className="eyebrow">Trace your bottle · {product.trace.batch}</p>
-              <DialogTitle className="mt-3 font-display text-4xl font-medium leading-none md:text-5xl">
-                {product.name}
-              </DialogTitle>
-              <DialogDescription className="mt-4 text-base leading-relaxed text-muted-foreground">
-                {product.description}
-              </DialogDescription>
-
-              <h4 className="mt-8 text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground">
-                Batch traceability
-              </h4>
-              <ol className="relative mt-4 space-y-4 border-l border-gold/40 pl-6">
-                {[
-                  ["Farm origin", `${product.trace.farm}, ${product.trace.region}`],
-                  ["Harvest", product.trace.harvested],
-                  ["Press date", product.trace.pressed],
-                  ["Method", product.trace.method],
-                ].map(([k, v]) => (
-                  <li key={k} className="relative">
-                    <span
-                      className="absolute -left-[29px] top-1.5 size-2.5 rounded-full bg-gold-gradient"
-                      aria-hidden
-                    />
-                    <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{k}</p>
-                    <p className="font-display text-xl">{v}</p>
-                  </li>
-                ))}
-              </ol>
-
-              <h4 className="mt-8 text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground">
-                Lab purity report
-              </h4>
-              <table className="mt-3 w-full text-sm">
-                <caption className="sr-only">
-                  Independent lab results for batch {product.trace.batch}
-                </caption>
-                <tbody>
-                  {product.lab.map((r) => (
-                    <tr key={r.label} className="border-b border-border">
-                      <th
-                        scope="row"
-                        className="py-2.5 text-left font-normal text-muted-foreground"
-                      >
-                        {r.label}
-                      </th>
-                      <td className="py-2.5 text-right font-medium">{r.value}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
-                <p className="font-display text-3xl">
-                  {formatINR(product.price)}{" "}
-                  <span className="text-base text-muted-foreground">/ {product.volume}</span>
-                </p>
-                <MagneticButton
-                  onClick={() => {
-                    add(product);
-                    onClose();
-                  }}
-                >
-                  Add to basket <Plus className="size-4" />
-                </MagneticButton>
-              </div>
-            </div>
-          </div>
-        )}
-      </DialogContent>
-    </Dialog>
-  );
-}
-
 export function Collection() {
-  const [active, setActive] = useState<Product | null>(null);
   return (
     <section
       id="collection"
@@ -286,19 +207,107 @@ export function Collection() {
             </span>
           </div>
           <FadeUp>
-            <p className="max-w-md text-lg leading-relaxed text-muted-foreground">
-              Four pressings, each from a single farm and a single harvest. Open any bottle to see
-              where — and when — it was made.
-            </p>
+            <div className="space-y-4">
+              <p className="max-w-md text-lg leading-relaxed text-muted-foreground">
+                Four pressings, each from a single farm and a single harvest. Explore each bottle to trace the seeds, wood ghani temperature, and certified NABL lab reports.
+              </p>
+              <Link
+                to="/products"
+                className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-gold-ink hover:underline"
+              >
+                View all pressings & bulk tins <ArrowRight className="size-3.5" />
+              </Link>
+            </div>
           </FadeUp>
         </div>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2">
-          {PRODUCTS.map((p, i) => (
-            <ProductCard key={p.id} product={p} index={i} onQuickView={() => setActive(p)} />
+          {PRODUCTS.slice(0, 4).map((p, i) => (
+            <ProductCard key={p.id} product={p} index={i} />
           ))}
         </div>
+
+        {/* Extended Harvest Reserve Showcase (New Additions) */}
+        <div className="mt-20 border-t border-border/60 pt-16">
+          <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
+            <div>
+              <p className="eyebrow text-gold-ink">New Harvest Additions</p>
+              <h3 className="font-display text-3xl font-medium tracking-tight md:text-4xl">
+                Explore The Expanded Pantry Reserve
+              </h3>
+            </div>
+            <Link
+              to="/products"
+              className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-gold-ink hover:underline"
+            >
+              See all 20 pressings <ArrowRight className="size-3.5" />
+            </Link>
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {PRODUCTS.slice(4, 12).map((item) => (
+              <div
+                key={item.id}
+                className="glass-panel group relative flex flex-col justify-between rounded-3xl p-5 transition-all duration-500 hover:border-gold/40 hover:shadow-gold"
+              >
+                <div>
+                  <div className="flex items-center justify-between font-mono text-[11px] text-muted-foreground">
+                    <span>{item.trace.batch}</span>
+                    <span className="flex items-center gap-1 text-gold-ink">
+                      <Flame className="size-3" /> {item.smokePoint}
+                    </span>
+                  </div>
+
+                  <Link
+                    to="/products/$slug"
+                    params={{ slug: item.slug }}
+                    className="mt-2 block group-hover:text-gold-ink transition-colors"
+                  >
+                    <h4 className="font-display text-xl font-medium leading-tight">{item.name}</h4>
+                    <p className="font-serif text-xs italic text-muted-foreground">{item.regionalName}</p>
+                  </Link>
+                </div>
+
+                <Link
+                  to="/products/$slug"
+                  params={{ slug: item.slug }}
+                  className="my-4 flex h-40 items-center justify-center p-2"
+                >
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="max-h-full w-auto object-contain drop-shadow transition-transform duration-500 group-hover:scale-105"
+                  />
+                </Link>
+
+                <div className="border-t border-border/40 pt-3 flex items-center justify-between">
+                  <div>
+                    <p className="font-display text-xl font-medium">{formatINR(item.price)}</p>
+                    <p className="font-mono text-[11px] text-muted-foreground">{item.volume}</p>
+                  </div>
+
+                  <Link
+                    to="/products/$slug"
+                    params={{ slug: item.slug }}
+                    className="rounded-full border border-foreground/20 px-3.5 py-1.5 font-mono text-xs uppercase tracking-wider text-foreground hover:border-gold hover:text-gold-ink transition-colors"
+                  >
+                    Details
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Catalog Banner CTA */}
+        <div className="mt-16 text-center">
+          <Link
+            to="/products"
+            className="inline-flex items-center gap-3 rounded-full border border-foreground/25 bg-background/80 px-8 py-4 font-mono text-xs uppercase tracking-[0.2em] text-foreground backdrop-blur-md transition-all hover:border-gold hover:bg-gold hover:text-accent-foreground hover:shadow-gold"
+          >
+            Enter The Pressing Room — Explore All 20 Pressings &amp; Tins <ArrowRight className="size-4" />
+          </Link>
+        </div>
       </div>
-      <QuickView product={active} onClose={() => setActive(null)} />
     </section>
   );
 }

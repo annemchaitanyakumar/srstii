@@ -12,13 +12,13 @@ const WATER_PALETTES: Record<
     fog: [number, number, number];
   }
 > = {
-  // Resadex signature serene sage/mint/pearl water
+  // Heritage Liquid Gold: sunlit cold-pressed golden amber oil
   drizzle: {
-    body: [0.66, 0.8, 0.62],
-    envBottom: [0.5, 0.67, 0.48],
-    envTop: [0.96, 0.99, 0.92],
-    envMid: [0.5, 0.68, 0.46],
-    fog: [0.8, 0.9, 0.76],
+    body: [0.82, 0.68, 0.40],
+    envBottom: [0.70, 0.52, 0.26],
+    envTop: [0.99, 0.96, 0.90],
+    envMid: [0.82, 0.64, 0.34],
+    fog: [0.96, 0.92, 0.84],
   },
   // Crystal azure ocean / spring water
   water: {

@@ -27,17 +27,17 @@ export interface MoodConfig {
 }
 
 export const MOODS: Record<Mood, MoodConfig> = {
-  // Drizzle: Sage / fresh harvest green
+  // Drizzle: Heritage Sunlit Liquid Gold / Cold-Pressed Amber Oil
   drizzle: {
-    speed: 1.0,
+    speed: 0.95,
     amplitude: 0.95,
-    tint: [0.66, 0.8, 0.62],
-    deep: [0.35, 0.48, 0.32],
-    light: [0.96, 0.99, 0.92],
-    lightIntensity: 1.15,
+    tint: [0.82, 0.68, 0.40],
+    deep: [0.46, 0.32, 0.12],
+    light: [0.99, 0.96, 0.90],
+    lightIntensity: 1.25,
     steepness: 0.85,
     microChop: 0.65,
-    foam: 0.65,
+    foam: 0.55,
   },
   // Saute: Sleek Mineral & Slate Smoke Grey
   saute: {

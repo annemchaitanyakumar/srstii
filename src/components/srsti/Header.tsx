@@ -1,3 +1,4 @@
+import { Link, useLocation } from "@tanstack/react-router";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { Moon, ShoppingBag, Sun } from "lucide-react";
 import { useState } from "react";
@@ -7,25 +8,27 @@ import { cn } from "@/lib/utils";
 import { useCart } from "./cart";
 import { useTheme } from "./useTheme";
 
-const LINKS = [
-  { href: "#craft", label: "The Craft" },
-  { href: "#collection", label: "Collection" },
-  { href: "#purity", label: "Purity" },
-  { href: "#rituals", label: "Rituals" },
-];
-
 export function Header() {
   const { dark, toggle } = useTheme();
-  const { count } = useCart();
+  const { count, openCart } = useCart();
   const { scrollY } = useScroll();
   const [solid, setSolid] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const location = useLocation();
+  const isHome = location.pathname === "/";
 
   useMotionValueEvent(scrollY, "change", (y) => {
     const prev = scrollY.getPrevious() ?? 0;
     setSolid(y > 40);
     setHidden(y > prev && y > 400);
   });
+
+  const handleSectionClick = (e: React.MouseEvent<HTMLAnchorElement>, hash: string) => {
+    if (isHome) {
+      e.preventDefault();
+      scrollToTarget(hash);
+    }
+  };
 
   return (
     <motion.header
@@ -44,29 +47,51 @@ export function Header() {
         aria-label="Primary"
         className={cn(
           "mx-auto flex max-w-7xl items-center justify-between rounded-full px-4 py-2 transition-all duration-500 md:px-6",
-          solid && "glass-panel",
+          solid ? "glass-panel" : "bg-linen/60 backdrop-blur-md border border-glass-border/40",
         )}
       >
-        <a
-          href="#top"
+        <Link
+          to="/"
           onClick={(e) => {
-            e.preventDefault();
-            scrollToTarget(0);
+            if (isHome) {
+              e.preventDefault();
+              scrollToTarget(0);
+            }
           }}
-          className="flex min-h-12 items-center font-display text-2xl font-bold tracking-[0.22em]"
-          aria-label="SRSTI — back to top"
+          className="flex min-h-12 items-center font-display text-2xl font-bold tracking-[0.22em] text-foreground transition-opacity hover:opacity-85"
+          aria-label="SRSTI — home"
         >
           SRSTI
-        </a>
-        <ul className="hidden items-center gap-8 lg:flex">
-          {LINKS.map((l) => (
-            <li key={l.href}>
+        </Link>
+        <ul className="hidden items-center gap-7 lg:flex">
+          <li>
+            <Link
+              to="/products"
+              className={cn(
+                "group relative py-2 font-mono text-xs uppercase tracking-widest transition-colors hover:text-foreground",
+                location.pathname.startsWith("/products")
+                  ? "text-gold-ink font-semibold"
+                  : "text-foreground/80",
+              )}
+            >
+              All Pressings
+              <span
+                className={cn(
+                  "absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-gold transition-transform duration-500 group-hover:scale-x-100",
+                  location.pathname.startsWith("/products") && "scale-x-100",
+                )}
+              />
+            </Link>
+          </li>
+          {[
+            { href: "/#craft", hash: "#craft", label: "The Craft" },
+            { href: "/#purity", hash: "#purity", label: "Purity" },
+            { href: "/#rituals", hash: "#rituals", label: "Rituals" },
+          ].map((l) => (
+            <li key={l.label}>
               <a
                 href={l.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToTarget(l.href);
-                }}
+                onClick={(e) => handleSectionClick(e, l.hash)}
                 className="group relative py-2 font-mono text-xs uppercase tracking-widest text-foreground/80 transition-colors hover:text-foreground"
               >
                 {l.label}
@@ -75,7 +100,14 @@ export function Header() {
             </li>
           ))}
         </ul>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
+          <Link
+            to="/products"
+            className="hidden sm:inline-flex items-center rounded-full border border-glass-border px-3.5 py-1.5 font-mono text-xs text-foreground/80 transition-all hover:border-gold hover:text-gold-ink"
+          >
+            The Pressing Room
+          </Link>
+
           <button
             type="button"
             onClick={(e) => {
@@ -86,7 +118,7 @@ export function Header() {
               dark ? "Switch to Sunlit Harvest light theme" : "Switch to Midnight Press dark theme"
             }
             aria-pressed={dark}
-            className="relative grid size-12 place-items-center overflow-hidden rounded-full transition-colors hover:bg-foreground/5"
+            className="relative grid size-11 place-items-center overflow-hidden rounded-full transition-colors hover:bg-foreground/5"
           >
             <Sun
               className={cn(
@@ -105,9 +137,9 @@ export function Header() {
           </button>
           <button
             type="button"
-            aria-label={`Basket, ${count} ${count === 1 ? "item" : "items"}`}
-            onClick={() => scrollToTarget("#collection")}
-            className="relative grid size-12 place-items-center rounded-full transition-colors hover:bg-foreground/5"
+            aria-label={`Harvest Basket, ${count} ${count === 1 ? "item" : "items"}`}
+            onClick={openCart}
+            className="relative grid size-11 place-items-center rounded-full transition-colors hover:bg-foreground/5 cursor-pointer"
           >
             <ShoppingBag className="size-5" strokeWidth={1.4} />
             {count > 0 && (
@@ -115,7 +147,7 @@ export function Header() {
                 key={count}
                 initial={{ scale: 0.4 }}
                 animate={{ scale: 1 }}
-                className="absolute right-1.5 top-1.5 grid min-w-5 place-items-center rounded-full bg-gold-gradient px-1 text-[10px] font-semibold text-accent-foreground"
+                className="absolute right-1 top-1 grid min-w-5 place-items-center rounded-full bg-gold-gradient px-1 text-[10px] font-semibold text-accent-foreground"
               >
                 {count}
               </motion.span>

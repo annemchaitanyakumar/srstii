@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { CartProvider } from "@/components/srsti/cart";
 import { Collection } from "@/components/srsti/Collection";
 import { Craft } from "@/components/srsti/Craft";
 import { Footer } from "@/components/srsti/Footer";
@@ -37,7 +36,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   useExperience();
   return (
-    <CartProvider>
+    <>
       <OilBackdrop />
       <WaterTouchRipple />
       <Header />
@@ -49,6 +48,6 @@ function Index() {
         <Rituals />
       </main>
       <Footer />
-    </CartProvider>
+    </>
   );
 }

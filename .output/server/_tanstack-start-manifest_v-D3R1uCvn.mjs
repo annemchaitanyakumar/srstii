@@ -1,0 +1,47 @@
+//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-D3R1uCvn.js
+var tsrStartManifest = () => ({ routes: {
+	__root__: {
+		filePath: "C:/Users/chait/Downloads/LOVE/src/routes/__root.tsx",
+		children: [
+			"/",
+			"/products/$slug",
+			"/products/"
+		],
+		preloads: ["/assets/index-rJ9SeorE.js"],
+		scripts: [{ attrs: {
+			type: "module",
+			async: !0,
+			src: "/assets/index-rJ9SeorE.js"
+		} }]
+	},
+	"/": {
+		filePath: "C:/Users/chait/Downloads/LOVE/src/routes/index.tsx",
+		children: void 0,
+		preloads: [
+			"/assets/routes-BCBSGBMy.js",
+			"/assets/Header-CiROtfja.js",
+			"/assets/AnimatePresence-Cp9oeaVm.js"
+		]
+	},
+	"/products/$slug": {
+		filePath: "C:/Users/chait/Downloads/LOVE/src/routes/products/$slug.tsx",
+		children: void 0,
+		preloads: [
+			"/assets/_slug-D9Q93oQc.js",
+			"/assets/Header-CiROtfja.js",
+			"/assets/AnimatePresence-Cp9oeaVm.js",
+			"/assets/thermometer-snowflake-CB1_pMVF.js"
+		]
+	},
+	"/products/": {
+		filePath: "C:/Users/chait/Downloads/LOVE/src/routes/products/index.tsx",
+		children: void 0,
+		preloads: [
+			"/assets/products-Dyb8Nfgb.js",
+			"/assets/Header-CiROtfja.js",
+			"/assets/thermometer-snowflake-CB1_pMVF.js"
+		]
+	}
+} });
+//#endregion
+export { tsrStartManifest };

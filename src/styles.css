@@ -70,94 +70,94 @@
   --ease-silk: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Sage Mist, Forest Ink & Pearl Jade */
+/* Heritage Linen, Roasted Umber & Liquid Amber Gold */
 :root {
   --radius: 1rem;
-  --background: #b9d6a8;
-  --foreground: #0e1f10;
-  --linen: rgba(236, 247, 228, 0.85);
-  --card: rgba(242, 250, 235, 0.72);
-  --card-foreground: #0e1f10;
-  --popover: rgba(242, 250, 235, 0.92);
-  --popover-foreground: #0e1f10;
-  --primary: #0e1f10;
-  --primary-foreground: #f2faeb;
-  --secondary: rgba(214, 236, 202, 0.75);
-  --secondary-foreground: #0e1f10;
-  --muted: rgba(214, 236, 202, 0.65);
-  --muted-foreground: #2d4530;
-  --accent: #1e4a26;
-  --accent-foreground: #f2faeb;
-  --gold: #2a6a38;
-  --gold-ink: #184622;
-  --gold-glow: rgba(42, 106, 56, 0.35);
-  --glass: rgba(242, 250, 235, 0.65);
-  --glass-border: rgba(14, 31, 16, 0.14);
-  --veil: rgba(242, 250, 235, 0.85);
+  --background: #FAF6EE;
+  --foreground: #1C1612;
+  --linen: rgba(255, 252, 246, 0.88);
+  --card: rgba(255, 253, 248, 0.82);
+  --card-foreground: #1C1612;
+  --popover: rgba(255, 253, 248, 0.96);
+  --popover-foreground: #1C1612;
+  --primary: #1C1612;
+  --primary-foreground: #FAF6EE;
+  --secondary: rgba(244, 238, 226, 0.85);
+  --secondary-foreground: #1C1612;
+  --muted: rgba(240, 232, 218, 0.75);
+  --muted-foreground: #6E5D4F;
+  --accent: #C88A2C;
+  --accent-foreground: #FFFFFF;
+  --gold: #C88A2C;
+  --gold-ink: #7A4B0C;
+  --gold-glow: rgba(200, 138, 44, 0.32);
+  --glass: rgba(255, 252, 246, 0.75);
+  --glass-border: rgba(28, 22, 18, 0.10);
+  --veil: rgba(250, 246, 238, 0.88);
   --destructive: #dc2626;
   --destructive-foreground: #fff;
-  --border: rgba(14, 31, 16, 0.14);
-  --input: rgba(14, 31, 16, 0.14);
-  --ring: #2a6a38;
-  --shadow-glass-v: 0 25px 50px -20px rgba(14, 31, 16, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.7);
-  --shadow-gold-v: 0 15px 35px -10px rgba(42, 106, 56, 0.35);
-  --gradient-gold: linear-gradient(135deg, #1b4d25, #2d733b 50%, #52a363);
-  --gradient-gold-text: linear-gradient(135deg, #0e1f10, #1b4d25 45%, #2d733b);
-  --chart-1: #2a6a38;
-  --chart-2: #3e884f;
-  --chart-3: #52a363;
-  --chart-4: #7ac088;
-  --chart-5: #a7e8b3;
-  --sidebar: rgba(236, 247, 228, 0.95);
-  --sidebar-foreground: #0e1f10;
-  --sidebar-primary: #0e1f10;
-  --sidebar-primary-foreground: #f2faeb;
-  --sidebar-accent: rgba(214, 236, 202, 0.75);
-  --sidebar-accent-foreground: #0e1f10;
-  --sidebar-border: rgba(14, 31, 16, 0.12);
-  --sidebar-ring: #2a6a38;
+  --border: rgba(28, 22, 18, 0.12);
+  --input: rgba(28, 22, 18, 0.12);
+  --ring: #C88A2C;
+  --shadow-glass-v: 0 25px 50px -20px rgba(28, 22, 18, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  --shadow-gold-v: 0 15px 35px -10px rgba(200, 138, 44, 0.28);
+  --gradient-gold: linear-gradient(135deg, #B5741E, #D49B3E 50%, #F0C46B);
+  --gradient-gold-text: linear-gradient(135deg, #1C1612, #5C3810 45%, #C88A2C);
+  --chart-1: #C88A2C;
+  --chart-2: #D49B3E;
+  --chart-3: #B5741E;
+  --chart-4: #8C5312;
+  --chart-5: #E8BE72;
+  --sidebar: rgba(255, 252, 246, 0.95);
+  --sidebar-foreground: #1C1612;
+  --sidebar-primary: #1C1612;
+  --sidebar-primary-foreground: #FAF6EE;
+  --sidebar-accent: rgba(244, 238, 226, 0.85);
+  --sidebar-accent-foreground: #1C1612;
+  --sidebar-border: rgba(28, 22, 18, 0.10);
+  --sidebar-ring: #C88A2C;
 }
 
-/* Midnight Forest */
+/* Midnight Roasted Ebony */
 .dark {
-  --background: #08120a;
-  --foreground: #eef7eb;
-  --linen: #102114;
-  --card: rgba(16, 33, 20, 0.75);
-  --card-foreground: #eef7eb;
-  --popover: rgba(14, 28, 17, 0.92);
-  --popover-foreground: #eef7eb;
-  --primary: #eef7eb;
-  --primary-foreground: #08120a;
-  --secondary: #172e1b;
-  --secondary-foreground: #eef7eb;
-  --muted: #172e1b;
-  --muted-foreground: #8fa88c;
-  --accent: #52a363;
-  --accent-foreground: #08120a;
-  --gold: #52a363;
-  --gold-ink: #7ac088;
-  --gold-glow: rgba(82, 163, 99, 0.45);
-  --glass: rgba(16, 33, 20, 0.65);
-  --glass-border: rgba(82, 163, 99, 0.22);
-  --veil: rgba(8, 18, 10, 0.88);
+  --background: #14100D;
+  --foreground: #F5EFEB;
+  --linen: #1E1814;
+  --card: rgba(30, 24, 20, 0.78);
+  --card-foreground: #F5EFEB;
+  --popover: rgba(26, 20, 16, 0.94);
+  --popover-foreground: #F5EFEB;
+  --primary: #F5EFEB;
+  --primary-foreground: #14100D;
+  --secondary: #261F1A;
+  --secondary-foreground: #F5EFEB;
+  --muted: #261F1A;
+  --muted-foreground: #A8988B;
+  --accent: #D49B3E;
+  --accent-foreground: #14100D;
+  --gold: #D49B3E;
+  --gold-ink: #E8BE72;
+  --gold-glow: rgba(212, 155, 62, 0.40);
+  --glass: rgba(30, 24, 20, 0.70);
+  --glass-border: rgba(212, 155, 62, 0.22);
+  --veil: rgba(20, 16, 13, 0.88);
   --destructive: #ef4444;
   --destructive-foreground: #fff;
-  --border: rgba(82, 163, 99, 0.2);
-  --input: rgba(82, 163, 99, 0.2);
-  --ring: #52a363;
+  --border: rgba(212, 155, 62, 0.18);
+  --input: rgba(212, 155, 62, 0.18);
+  --ring: #D49B3E;
   --shadow-glass-v: 0 30px 60px -25px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  --shadow-gold-v: 0 15px 40px -10px rgba(82, 163, 99, 0.35);
-  --gradient-gold: linear-gradient(135deg, #7ac088, #52a363 50%, #2d733b);
-  --gradient-gold-text: linear-gradient(135deg, #ffffff, #bbf7c5 45%, #7ac088);
-  --sidebar: #102114;
-  --sidebar-foreground: #eef7eb;
-  --sidebar-primary: #52a363;
-  --sidebar-primary-foreground: #08120a;
-  --sidebar-accent: #172e1b;
-  --sidebar-accent-foreground: #eef7eb;
-  --sidebar-border: rgba(82, 163, 99, 0.2);
-  --sidebar-ring: #52a363;
+  --shadow-gold-v: 0 15px 40px -10px rgba(212, 155, 62, 0.35);
+  --gradient-gold: linear-gradient(135deg, #E8BE72, #D49B3E 50%, #B5741E);
+  --gradient-gold-text: linear-gradient(135deg, #FFFFFF, #FCE8BD 45%, #E8BE72);
+  --sidebar: #1E1814;
+  --sidebar-foreground: #F5EFEB;
+  --sidebar-primary: #D49B3E;
+  --sidebar-primary-foreground: #14100D;
+  --sidebar-accent: #261F1A;
+  --sidebar-accent-foreground: #F5EFEB;
+  --sidebar-border: rgba(212, 155, 62, 0.18);
+  --sidebar-ring: #D49B3E;
 }
 
 /* Mood-specific dynamic theme overrides (Saute: Grey, Ayurvedic Ritual: Chocolate) */
@@ -193,12 +193,12 @@
     border-color: var(--color-border);
   }
   html {
-    background-color: #b9d6a8;
+    background-color: var(--background);
     color-scheme: light;
     -webkit-text-size-adjust: 100%;
   }
   html.dark {
-    background-color: #08120a;
+    background-color: var(--background);
     color-scheme: dark;
   }
   html.lenis,

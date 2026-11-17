@@ -1,6 +1,5 @@
 import { n as __toESM } from "../_runtime.mjs";
-import { n as require_react } from "./@radix-ui/react-compose-refs+[...].mjs";
-import { n as require_jsx_runtime } from "./radix-ui__react-context+react.mjs";
+import { _ as require_react, g as require_jsx_runtime } from "./@radix-ui/react-accordion+[...].mjs";
 //#region node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 var import_jsx_runtime = require_jsx_runtime();

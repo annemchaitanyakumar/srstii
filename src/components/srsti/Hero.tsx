@@ -30,13 +30,14 @@ export function Hero() {
         {/* Graza-style bold condensed Garamond centerpiece */}
         <h1
           id="hero-title"
-          className="font-display text-[clamp(3.8rem,9vw,9.2rem)] font-bold leading-[0.88] tracking-[-0.035em] text-foreground"
+          className="font-display text-[clamp(3.8rem,9vw,9.2rem)] font-bold leading-[0.93] tracking-[-0.035em] text-foreground"
         >
-          <SplitReveal text="Pure. Real." className="block font-bold" delay={0.35} />
+          <SplitReveal text="Pure. Real." className="block font-bold" delay={0.25} immediate />
           <SplitReveal
             text="Liquid Heritage."
             className="block font-medium italic text-gold-gradient"
-            delay={0.52}
+            delay={0.42}
+            immediate
           />
         </h1>
 

@@ -1,10 +1,24 @@
 import { n as __toESM, t as __commonJSMin } from "../../_runtime.mjs";
-import { n as require_react } from "../@radix-ui/react-compose-refs+[...].mjs";
+import { _ as require_react, g as require_jsx_runtime, h as require_react_dom } from "../@radix-ui/react-accordion+[...].mjs";
 import { i as parseHref, r as normalizeProtocolRelative } from "../tanstack__history.mjs";
-import { n as require_jsx_runtime } from "../radix-ui__react-context+react.mjs";
-import { c as require_react_dom } from "../@radix-ui/react-dialog+[...].mjs";
 import { PassThrough, Readable } from "node:stream";
 //#region node_modules/@tanstack/router-core/dist/esm/not-found.js
+/**
+* Create a not-found error object recognized by TanStack Router.
+*
+* Throw this from loaders/actions to trigger the nearest `notFoundComponent`.
+* Use `routeId` to target a specific route's not-found boundary. If `throw`
+* is true, the error is thrown instead of returned.
+*
+* @param options Optional settings including `routeId`, `headers`, and `throw`.
+* @returns A not-found error object that can be thrown or returned.
+* @link https://tanstack.com/router/latest/docs/router/framework/react/api/router/notFoundFunction
+*/
+function notFound(options = {}) {
+	options.isNotFound = true;
+	if (options.throw) throw options;
+	return options;
+}
 /** Determine if a value is a TanStack Router not-found error. */
 function isNotFound(obj) {
 	return obj?.isNotFound === true;
@@ -5520,6 +5534,26 @@ function RouterProvider({ router, ...rest }) {
 		...rest,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Matches, {})
 	});
+}
+//#endregion
+//#region node_modules/@tanstack/react-router/dist/esm/useLocation.js
+/**
+* Read the current location from the router state with optional selection.
+* Useful for subscribing to just the pieces of location you care about.
+*
+* Options:
+* - `select`: Project the `location` object to a derived value
+* - `structuralSharing`: Enable structural sharing for stable references
+*
+* @returns The current location (or selected value).
+* @link https://tanstack.com/router/latest/docs/framework/react/api/router/useLocationHook
+*/
+function useLocation(opts) {
+	const router = useRouter();
+	{
+		const location = router.stores.location.get();
+		return opts?.select ? opts.select(location) : location;
+	}
 }
 //#endregion
 //#region node_modules/@tanstack/react-router/dist/esm/Asset.js
@@ -15520,4 +15554,4 @@ var renderRouterToStream = async ({ request, router, responseHeaders, children }
 	}
 };
 //#endregion
-export { SerovalUnknownTypedArrayError as $, REFERENCES_KEY as A, resolveManifestCssLink as At, SYM_ASYNC_ITERATOR as B, isRedirect as Bt, CONSTANT_STRING as C, optional as Ct, INV_SYMBOL_REF as D, getScriptPreloadAttrs as Dt, ERROR_CONSTRUCTOR_STRING as E, createInlineCssStyleAsset as Et, SERIALIZED_PROMISE_FAILURE as F, createSieveCache as Ft, SerovalDepthLimitError as G, SYM_ITERATOR as H, isNotFound as Ht, SERIALIZED_PROMISE_SUCCESS as I, decodePath as It, SerovalMissingInstanceError as J, SerovalDeserializationError as K, SERIALIZED_STREAM_CONSTRUCTOR as L, isDangerousProtocol as Lt, SERIALIZED_ASYNC_ITERATOR_CONSTRUCTOR as M, _getRenderedMatches as Mt, SERIALIZED_ITERATOR_CONSTRUCTOR as N, executeRewriteInput as Nt, OpaqueReference as O, getStylesheetHref as Ot, SERIALIZED_PROMISE_CONSTRUCTOR as P, invariant as Pt, SerovalSerializationError as Q, SYMBOL_REF as R, isPromise as Rt, ARRAY_BUFFER_CONSTRUCTOR as S, object as St, ERROR_CONSTRUCTOR as T, createInlineCssPlaceholderAsset as Tt, SYM_TO_STRING_TAG as U, SYM_IS_CONCAT_SPREADABLE as V, rootRouteId as Vt, SerovalConflictedNodeIdError as W, SerovalParserError as X, SerovalMissingPluginError as Y, SerovalPluginValidationError as Z, createFileRoute as _, serializeString as _t, isSsrResponse as a, createSequence as at, useRouter as b, instanceOf as bt, stripSsrResponseBody as c, deserializeString as ct, Scripts as d, getReferenceID as dt, SerovalUnsupportedNodeError as et, HeadContent as f, isLiveStream as ft, lazyRouteComponent as g, sequenceToIterator as gt, Outlet as h, resolvePlugins as ht, disposeSsrResponse as i, createPlugin as it, SERIALIZED_ARRAY_BUFFER_CONSTRUCTOR as j, waitForReason as jt, PROMISE_CONSTRUCTOR as k, resolveManifestAssetLink as kt, createHydrationScripts as l, getPlainObjectPlugins as lt, createRouter as m, isStream as mt, bindSsrResponseToRequest as n, Stream as nt, normalizeSsrResponse as o, createSequenceFromIterable as ot, RouterProvider as p, isSequence as pt, SerovalMalformedNodeError as q, defineHandlerCallback as r, TEMPORAL_TYPE_NAME as rt, replaceSsrResponse as s, createStream as st, renderRouterToStream as t, SerovalUnsupportedTypeError as tt, GLOBAL_TSR as u, getReference as ut, createRootRouteWithContext as v, streamToAsyncIterable as vt, CONSTANT_VAL as w, string as wt, ClientOnly as x, number as xt, Link as y, boolean as yt, SYMBOL_STRING as z, dehydrateSsrMatchId as zt };
+export { SerovalSerializationError as $, PROMISE_CONSTRUCTOR as A, resolveManifestAssetLink as At, SYMBOL_STRING as B, dehydrateSsrMatchId as Bt, ARRAY_BUFFER_CONSTRUCTOR as C, object as Ct, ERROR_CONSTRUCTOR_STRING as D, createInlineCssStyleAsset as Dt, ERROR_CONSTRUCTOR as E, createInlineCssPlaceholderAsset as Et, SERIALIZED_PROMISE_CONSTRUCTOR as F, invariant as Ft, SerovalConflictedNodeIdError as G, SYM_IS_CONCAT_SPREADABLE as H, rootRouteId as Ht, SERIALIZED_PROMISE_FAILURE as I, createSieveCache as It, SerovalMalformedNodeError as J, SerovalDepthLimitError as K, SERIALIZED_PROMISE_SUCCESS as L, decodePath as Lt, SERIALIZED_ARRAY_BUFFER_CONSTRUCTOR as M, waitForReason as Mt, SERIALIZED_ASYNC_ITERATOR_CONSTRUCTOR as N, _getRenderedMatches as Nt, INV_SYMBOL_REF as O, getScriptPreloadAttrs as Ot, SERIALIZED_ITERATOR_CONSTRUCTOR as P, executeRewriteInput as Pt, SerovalPluginValidationError as Q, SERIALIZED_STREAM_CONSTRUCTOR as R, isDangerousProtocol as Rt, ClientOnly as S, number as St, CONSTANT_VAL as T, string as Tt, SYM_ITERATOR as U, isNotFound as Ut, SYM_ASYNC_ITERATOR as V, isRedirect as Vt, SYM_TO_STRING_TAG as W, notFound as Wt, SerovalMissingPluginError as X, SerovalMissingInstanceError as Y, SerovalParserError as Z, lazyRouteComponent as _, sequenceToIterator as _t, isSsrResponse as a, createPlugin as at, Link as b, boolean as bt, stripSsrResponseBody as c, createStream as ct, Scripts as d, getReference as dt, SerovalUnknownTypedArrayError as et, HeadContent as f, getReferenceID as ft, Outlet as g, resolvePlugins as gt, createRouter as h, isStream as ht, disposeSsrResponse as i, TEMPORAL_TYPE_NAME as it, REFERENCES_KEY as j, resolveManifestCssLink as jt, OpaqueReference as k, getStylesheetHref as kt, createHydrationScripts as l, deserializeString as lt, RouterProvider as m, isSequence as mt, bindSsrResponseToRequest as n, SerovalUnsupportedTypeError as nt, normalizeSsrResponse as o, createSequence as ot, useLocation as p, isLiveStream as pt, SerovalDeserializationError as q, defineHandlerCallback as r, Stream as rt, replaceSsrResponse as s, createSequenceFromIterable as st, renderRouterToStream as t, SerovalUnsupportedNodeError as tt, GLOBAL_TSR as u, getPlainObjectPlugins as ut, createFileRoute as v, serializeString as vt, CONSTANT_STRING as w, optional as wt, useRouter as x, instanceOf as xt, createRootRouteWithContext as y, streamToAsyncIterable as yt, SYMBOL_REF as z, isPromise as zt };

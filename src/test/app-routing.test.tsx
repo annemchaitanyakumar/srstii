@@ -14,4 +14,20 @@ describe("App routing", () => {
 
     expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
   });
+
+  it("matches /products catalog page", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+
+    const matches = router.matchRoutes("/products");
+
+    expect(matches.at(-1)?.routeId).toBe("/products/");
+  });
+
+  it("matches /products/$slug detail page", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+
+    const matches = router.matchRoutes("/products/cold-pressed-groundnut-oil");
+
+    expect(matches.at(-1)?.routeId).toBe("/products/$slug");
+  });
 });

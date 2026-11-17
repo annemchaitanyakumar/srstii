@@ -5,7 +5,7 @@ function StaticWaterFallback() {
   return (
     <div
       aria-hidden
-      className="absolute inset-0 bg-[#b9d6a8]"
+      className="absolute inset-0 bg-background"
     />
   );
 }
