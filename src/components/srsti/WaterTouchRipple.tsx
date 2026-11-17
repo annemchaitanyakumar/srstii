@@ -19,12 +19,13 @@ void main() {
   float totalDhx = 0.0;
   float totalDhy = 0.0;
   float totalH = 0.0;
+  float totalFade = 0.0;
   float maxAlpha = 0.0;
 
   for (int i = 0; i < 4; i++) {
     if (uStrengths[i] < 0.01) continue;
     float t = uTimes[i];
-    if (t < 0.0 || t > 1.0) continue;
+    if (t < 0.0 || t > 1.05) continue;
 
     vec2 delta = coord - uCenters[i];
     float dist = length(delta);
@@ -47,10 +48,11 @@ void main() {
     float envDist = (ahead * 1.4 + abs(behind) * 0.7) / packetWidth;
 
     // Organic liquid attack and release:
-    // Starts at exact 0.0 (no sudden pop), blooms into full swell, then gently settles to exact 0.0 (no sudden cutoff)
-    float easeIn = smoothstep(0.0, 0.22, t);
-    float easeOut = smoothstep(1.0, 0.58, t);
+    // Smooth ease-in from 0.0, peaks smoothly, eases down seamlessly to exact 0.0 by t=0.95
+    float easeIn = smoothstep(0.0, 0.20, t);
+    float easeOut = 1.0 - smoothstep(0.45, 0.95, t);
     float envTime = easeIn * easeOut;
+    totalFade = max(totalFade, envTime);
 
     float envelope = exp(-envDist * envDist * 0.7) * envTime * uStrengths[i];
     float wave = cos(phase) * envelope;
@@ -58,7 +60,7 @@ void main() {
     // Massive, calm central fluid swell (starts and ends at exact 0.0)
     float coreDist = dist / 140.0;
     float coreEnv = exp(-coreDist * coreDist) * envTime * uStrengths[i];
-    float core = -sin(t * 3.14159) * coreEnv * 1.2;
+    float core = -sin(clamp(t / 0.95, 0.0, 1.0) * 3.14159) * coreEnv * 1.2;
 
     float h = wave * 2.5 + core * 1.3;
     totalH += h;
@@ -78,7 +80,7 @@ void main() {
     maxAlpha = max(maxAlpha, alphaContrib);
   }
 
-  if (maxAlpha < 0.002) {
+  if (maxAlpha < 0.001 || totalFade < 0.001) {
     gl_FragColor = vec4(0.0);
     return;
   }
@@ -110,10 +112,12 @@ void main() {
   float highlight = spec * 1.1 + broadSpec * 0.8 + F * 0.4;
   vec3 rgb = mix(highlightCol, shadowCol, troughShadow / (highlight + troughShadow + 0.001));
 
-  // Transparent alpha: underlying page content (cards, images, text) remains completely visible!
-  float alpha = clamp(highlight * 0.8 + troughShadow * 0.35, 0.0, 0.88);
+  // Transparent alpha: explicitly multiplied by totalFade so the entire ripple (highlights, caustics, shadows)
+  // smoothly and seamlessly dissolves to exact 0.0000 before the end of the duration
+  float rawAlpha = highlight * 0.85 + troughShadow * 0.35;
+  float alpha = clamp(rawAlpha * totalFade, 0.0, 0.88);
 
-  if (alpha < 0.001) {
+  if (alpha < 0.0005) {
     gl_FragColor = vec4(0.0);
     return;
   }
@@ -198,11 +202,11 @@ export function WaterTouchRipple() {
 
       let anyActive = false;
 
-      // Filter and populate up to 4 ripples (active for exactly 1.0 second)
+      // Filter and populate up to 4 ripples (settles to exact 0.0 at 0.95s, cleanup at 1.05s)
       for (let i = activeRipples.length - 1; i >= 0; i--) {
         const rip = activeRipples[i]!;
         const elapsed = (now - rip.startTime) / 1000;
-        if (elapsed > 1.0) {
+        if (elapsed > 1.05) {
           activeRipples.splice(i, 1);
         }
       }

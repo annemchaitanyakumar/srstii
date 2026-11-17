@@ -23,13 +23,6 @@ var public_assets_data_default = {
 		"size": 475,
 		"path": "../public/favicon.svg"
 	},
-	"/test-resadex.html": {
-		"type": "text/html; charset=utf-8",
-		"etag": "\"16be-Id8RzR3gs5eQVEwyHt8EhfijkWs\"",
-		"mtime": "2026-11-16T17:07:07.342Z",
-		"size": 5822,
-		"path": "../public/test-resadex.html"
-	},
 	"/robots.txt": {
 		"type": "text/plain; charset=utf-8",
 		"etag": "\"a0-CKGXSIe7TSsqDTmGm/nY1t/o5d0\"",
@@ -37,110 +30,117 @@ var public_assets_data_default = {
 		"size": 160,
 		"path": "../public/robots.txt"
 	},
+	"/test-resadex.html": {
+		"type": "text/html; charset=utf-8",
+		"etag": "\"16be-Id8RzR3gs5eQVEwyHt8EhfijkWs\"",
+		"mtime": "2026-11-16T17:07:07.342Z",
+		"size": 5822,
+		"path": "../public/test-resadex.html"
+	},
 	"/assets/craft-pour-DA4MGEuU.webp": {
 		"type": "image/webp",
 		"etag": "\"b708-zMjxqJDds3OkxuaR7Uyi4h08i4c\"",
-		"mtime": "2026-11-16T19:59:33.058Z",
+		"mtime": "2026-11-17T03:48:51.739Z",
 		"size": 46856,
 		"path": "../public/assets/craft-pour-DA4MGEuU.webp"
 	},
 	"/assets/craft-press-N2Hbkd1c.webp": {
 		"type": "image/webp",
 		"etag": "\"31360-8F/tJnjbSIB71lci1NBX8tF2DYU\"",
-		"mtime": "2026-11-16T19:59:33.059Z",
+		"mtime": "2026-11-17T03:48:51.740Z",
 		"size": 201568,
 		"path": "../public/assets/craft-press-N2Hbkd1c.webp"
 	},
 	"/assets/craft-seeds-CaW9cluN.webp": {
 		"type": "image/webp",
 		"etag": "\"253b4-FXbIpcP6hjgI2RD7+RRnmpPsD3Q\"",
-		"mtime": "2026-11-16T19:59:33.060Z",
+		"mtime": "2026-11-17T03:48:51.740Z",
 		"size": 152500,
 		"path": "../public/assets/craft-seeds-CaW9cluN.webp"
 	},
-	"/assets/index-gP43CQ0S.js": {
+	"/assets/index-CqwhfAaW.js": {
 		"type": "text/javascript; charset=utf-8",
-		"etag": "\"62ede-ZHn7kXg3uqDhr1F+Yytqu7Vw1Hs\"",
-		"mtime": "2026-11-16T19:59:33.057Z",
+		"etag": "\"62ede-G70A9TdfPg9BV/NJGgpITvqoUdI\"",
+		"mtime": "2026-11-17T03:48:51.737Z",
 		"size": 405214,
-		"path": "../public/assets/index-gP43CQ0S.js"
+		"path": "../public/assets/index-CqwhfAaW.js"
 	},
 	"/assets/product-coconut-wf10JjM0.webp": {
 		"type": "image/webp",
 		"etag": "\"4fd6-8KCIi3sqM7rixwMUFnk4BnPN538\"",
-		"mtime": "2026-11-16T19:59:33.060Z",
+		"mtime": "2026-11-17T03:48:51.740Z",
 		"size": 20438,
 		"path": "../public/assets/product-coconut-wf10JjM0.webp"
 	},
 	"/assets/product-ghee-CnLIfdBI.webp": {
 		"type": "image/webp",
 		"etag": "\"611e-v1GpA6a7kV5swN+jgmpbvDxLLzg\"",
-		"mtime": "2026-11-16T19:59:33.061Z",
+		"mtime": "2026-11-17T03:48:51.741Z",
 		"size": 24862,
 		"path": "../public/assets/product-ghee-CnLIfdBI.webp"
 	},
 	"/assets/product-groundnut-H4LWVJOT.webp": {
 		"type": "image/webp",
 		"etag": "\"45f0-RlnuJowAXRQZMCAHw88DFhCe9i0\"",
-		"mtime": "2026-11-16T19:59:33.061Z",
+		"mtime": "2026-11-17T03:48:51.741Z",
 		"size": 17904,
 		"path": "../public/assets/product-groundnut-H4LWVJOT.webp"
 	},
 	"/assets/product-sesame-NK76n0Pu.webp": {
 		"type": "image/webp",
 		"etag": "\"50aa-91m8+Mssb/xf+Ht0qC/00O4ojA8\"",
-		"mtime": "2026-11-16T19:59:33.061Z",
+		"mtime": "2026-11-17T03:48:51.742Z",
 		"size": 20650,
 		"path": "../public/assets/product-sesame-NK76n0Pu.webp"
 	},
 	"/assets/purity-farm-CfpAMlm1.webp": {
 		"type": "image/webp",
 		"etag": "\"23f20-+RRhxg/N4rzvkY02o8/2yqelIZE\"",
-		"mtime": "2026-11-16T19:59:33.063Z",
+		"mtime": "2026-11-17T03:48:51.742Z",
 		"size": 147232,
 		"path": "../public/assets/purity-farm-CfpAMlm1.webp"
 	},
 	"/assets/purity-refinery-GIZV0psr.webp": {
 		"type": "image/webp",
 		"etag": "\"12a76-VuDDQWeP5ed580FCh7aMWEQ0iMA\"",
-		"mtime": "2026-11-16T19:59:33.063Z",
+		"mtime": "2026-11-17T03:48:51.743Z",
 		"size": 76406,
 		"path": "../public/assets/purity-refinery-GIZV0psr.webp"
 	},
 	"/assets/ritual-ayurveda-Dlx38E8-.webp": {
 		"type": "image/webp",
 		"etag": "\"1bc40-qSyXEH0WK0R2gNU2dfLxg9k7U24\"",
-		"mtime": "2026-11-16T19:59:33.064Z",
+		"mtime": "2026-11-17T03:48:51.743Z",
 		"size": 113728,
 		"path": "../public/assets/ritual-ayurveda-Dlx38E8-.webp"
-	},
-	"/assets/ritual-saute-Bwc5qrUT.webp": {
-		"type": "image/webp",
-		"etag": "\"243be-zGdIfWjwnMqtxt/lHACV4WeFr6Q\"",
-		"mtime": "2026-11-16T19:59:33.065Z",
-		"size": 148414,
-		"path": "../public/assets/ritual-saute-Bwc5qrUT.webp"
 	},
 	"/assets/ritual-drizzle-Cb9Q7V0Y.webp": {
 		"type": "image/webp",
 		"etag": "\"320fc-CJaBzgVsjiqVSCE9mwBmGDqvw4c\"",
-		"mtime": "2026-11-16T19:59:33.064Z",
+		"mtime": "2026-11-17T03:48:51.743Z",
 		"size": 205052,
 		"path": "../public/assets/ritual-drizzle-Cb9Q7V0Y.webp"
 	},
-	"/assets/styles-ByU19VEg.css": {
-		"type": "text/css; charset=utf-8",
-		"etag": "\"19e37-y0GBLsNjLZRuivTut9lp+e0Lu3M\"",
-		"mtime": "2026-11-16T19:59:33.065Z",
-		"size": 106039,
-		"path": "../public/assets/styles-ByU19VEg.css"
+	"/assets/ritual-saute-Bwc5qrUT.webp": {
+		"type": "image/webp",
+		"etag": "\"243be-zGdIfWjwnMqtxt/lHACV4WeFr6Q\"",
+		"mtime": "2026-11-17T03:48:51.744Z",
+		"size": 148414,
+		"path": "../public/assets/ritual-saute-Bwc5qrUT.webp"
 	},
-	"/assets/routes-CmGE8Gcf.js": {
+	"/assets/styles-HvPBGXum.css": {
+		"type": "text/css; charset=utf-8",
+		"etag": "\"19e0f-S/2uU2sN8WnAAVY9lJpxdH+OxvI\"",
+		"mtime": "2026-11-17T03:48:51.744Z",
+		"size": 105999,
+		"path": "../public/assets/styles-HvPBGXum.css"
+	},
+	"/assets/routes-C6wgka-u.js": {
 		"type": "text/javascript; charset=utf-8",
-		"etag": "\"7aa77-aj1VNV3XJEUgBK3uNzizM1I/dNE\"",
-		"mtime": "2026-11-16T19:59:33.058Z",
-		"size": 502391,
-		"path": "../public/assets/routes-CmGE8Gcf.js"
+		"etag": "\"7aba6-jzjjPRIhpDeEIncxOF3uk0fHe/I\"",
+		"mtime": "2026-11-17T03:48:51.739Z",
+		"size": 502694,
+		"path": "../public/assets/routes-C6wgka-u.js"
 	}
 };
 //#endregion

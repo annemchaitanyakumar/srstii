@@ -97,17 +97,17 @@ float H(vec2 p) {
   h += exp(-e1 * e1 * 10.0) * (-cos(pr * 9.0) * exp(-pr * 4.0)) * 1.6 * step(0.4, ph);
 
   // Interactive mouse click ripple (ultra-smooth organic liquid attack & release over 1.0s)
-  if (uPointerStrength > 0.001 && uPointerAge < 1.0) {
+  if (uPointerStrength > 0.001 && uPointerAge < 1.05) {
     float em = length(p - uPointer);
     float wm = em - (uPointerAge * 0.45 + 0.05);
-    // Smooth ease-in from 0.0, peaks smoothly, eases out to exact 0.0
-    float easeIn = smoothstep(0.0, 0.22, uPointerAge);
-    float easeOut = smoothstep(1.0, 0.58, uPointerAge);
+    // Smooth ease-in from 0.0, peaks smoothly, eases down seamlessly to exact 0.0 by 0.95s
+    float easeIn = smoothstep(0.0, 0.20, uPointerAge);
+    float easeOut = 1.0 - smoothstep(0.45, 0.95, uPointerAge);
     float envAge = easeIn * easeOut;
     // Ultra-slow, massive, broad rolling liquid swell
     h += cos(wm * 0.75) * exp(-wm * wm * 0.14) * envAge * uPointerStrength * 1.5;
     // Calm, slow rebound splash dip and rise
-    h += exp(-em * em * 2.5) * (-sin(uPointerAge * 3.14159) * envAge) * 1.2 * uPointerStrength;
+    h += exp(-em * em * 2.5) * (-sin(clamp(uPointerAge / 0.95, 0.0, 1.0) * 3.14159) * envAge) * 1.2 * uPointerStrength;
   }
 
   return h * 0.11 * AF * (1.0 - uCalm * 0.85);
@@ -445,8 +445,8 @@ export function ResadexWater() {
 
       gsap.to(pointerSim, {
         strength: 0,
-        age: 1.0,
-        duration: 1.0,
+        age: 1.05,
+        duration: 1.05,
         ease: "power2.out",
         overwrite: "auto",
       });
@@ -472,8 +472,8 @@ export function ResadexWater() {
 
       gsap.to(pointerSim, {
         strength: 0,
-        age: 1.0,
-        duration: 1.0,
+        age: 1.05,
+        duration: 1.05,
         ease: "power2.out",
         overwrite: "auto",
       });
