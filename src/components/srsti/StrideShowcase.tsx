@@ -113,6 +113,16 @@ export function StrideShowcase() {
     const onMessage = (event: MessageEvent) => {
       if (event.data && event.data.type === "STRIDE_FLAVOUR_CHANGE") {
         handleFlavourUpdate(event.data);
+      } else if (event.data && event.data.type === "STRIDE_READY") {
+        try {
+          const cw = iframeRef.current?.contentWindow;
+          if (cw) {
+            cw.postMessage(
+              { type: isVisibleRef.current ? "STRIDE_RESUME" : "STRIDE_PAUSE" },
+              "*"
+            );
+          }
+        } catch {}
       }
     };
     window.addEventListener("message", onMessage);

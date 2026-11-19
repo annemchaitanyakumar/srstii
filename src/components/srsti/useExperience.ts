@@ -28,19 +28,29 @@ export function useExperience() {
     };
 
     let lenis: Lenis | null = null;
-    let tick: ((time: number) => void) | null = null;
+    let lenisRafId = 0;
     const onNativeScroll = () => updateScroll(window.scrollY);
 
     if (!reduce.matches) {
-      lenis = new Lenis({ lerp: 0.14, smoothWheel: true, wheelMultiplier: 1.0 });
+      // Responsive, agile lerp (0.20): provides luxurious luxury editorial glide with instant tactile zero-latency response
+      lenis = new Lenis({
+        lerp: 0.20,
+        wheelMultiplier: 1.0,
+        touchMultiplier: 1.0,
+        syncTouch: false,
+      });
       scrollRef.lenis = lenis;
       lenis.on("scroll", (l: Lenis) => {
         ScrollTrigger.update();
         updateScroll(l.scroll);
       });
-      tick = (time: number) => lenis?.raf(time * 1000);
-      gsap.ticker.add(tick);
-      gsap.ticker.lagSmoothing(500, 33);
+
+      // Drive Lenis on direct hardware rAF to prevent GSAP ticker clock desynchronization
+      const raf = (time: number) => {
+        lenis?.raf(time);
+        lenisRafId = requestAnimationFrame(raf);
+      };
+      lenisRafId = requestAnimationFrame(raf);
     } else {
       window.addEventListener("scroll", onNativeScroll, { passive: true });
     }
@@ -94,7 +104,7 @@ export function useExperience() {
       window.removeEventListener("scroll", onNativeScroll);
       window.removeEventListener("load", refresh);
       reduce.removeEventListener("change", onReduce);
-      if (tick) gsap.ticker.remove(tick);
+      cancelAnimationFrame(lenisRafId);
       gsap.ticker.remove(decay as unknown as gsap.TickerCallback);
       lenis?.destroy();
       scrollRef.lenis = null;

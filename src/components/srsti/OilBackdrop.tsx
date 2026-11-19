@@ -13,7 +13,7 @@ function StaticWaterFallback() {
 /** Fixed, full-viewport Resadex liquid-water canvas that sits behind the whole page. */
 export function OilBackdrop() {
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden>
+    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden transform-gpu" aria-hidden>
       <ClientOnly fallback={<StaticWaterFallback />}>
         <ResadexWater />
       </ClientOnly>

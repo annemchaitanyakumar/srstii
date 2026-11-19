@@ -1717,7 +1717,7 @@
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.LinearToneMapping;
     renderer.toneMappingExposure = 1.0;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, window.innerWidth < 820 ? 1.75 : 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isEmbedded ? 1.0 : (window.innerWidth < 820 ? 1.75 : 2)));
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     const scene = new THREE.Scene();
@@ -3913,7 +3913,7 @@
     function onResize() {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, vw < 820 ? 1.75 : 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isEmbedded ? 1.0 : (vw < 820 ? 1.75 : 2)));
       renderer.setSize(vw, vh);
 
       cameraD = computeCameraD(vw, vh);
@@ -3937,7 +3937,7 @@
 
     // Main Animation Loop
     let lastFrameTime = performance.now();
-    let isPaused = false;
+    let isPaused = isEmbedded;
 
     window.addEventListener('message', (e) => {
       if (e.data?.type === 'STRIDE_PAUSE') {
@@ -4329,7 +4329,13 @@
       } catch (err) {
         console.warn('Asset/texture load error:', err);
       }
-      requestAnimationFrame(animate);
+      if (isEmbedded) {
+        try {
+          window.parent.postMessage({ type: 'STRIDE_READY' }, '*');
+        } catch {}
+      } else {
+        requestAnimationFrame(animate);
+      }
     }
 
     init();

@@ -186,7 +186,7 @@ export function WaterTouchRipple() {
     const uStrengths = gl.getUniformLocation(pr, "uStrengths");
 
     function resize() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.0);
       canvas!.width = Math.round(window.innerWidth * dpr);
       canvas!.height = Math.round(window.innerHeight * dpr);
       gl!.viewport(0, 0, canvas!.width, canvas!.height);
@@ -199,7 +199,7 @@ export function WaterTouchRipple() {
     let isRunning = false;
 
     function renderLoop(now: number) {
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.0);
 
       const centersArr: number[] = [0, 0, 0, 0, 0, 0, 0, 0];
       const timesArr: number[] = [-1, -1, -1, -1];

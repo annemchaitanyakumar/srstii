@@ -35,7 +35,7 @@ export function Header() {
       initial={{ y: -40, opacity: 0 }}
       animate={{ y: hidden ? -100 : 0, opacity: 1 }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-8"
+      className="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-8 transform-gpu will-change-transform"
     >
       <a
         href="#main"

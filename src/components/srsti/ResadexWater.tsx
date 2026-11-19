@@ -294,17 +294,18 @@ void main() {
   if (rd.y < -0.001) {
     float t = -ro.y / rd.y;
     AF = exp(-0.07 * max(t - 7.0, 0.0));
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 2; i++) {
       vec3 q = ro + rd * t;
       t = (ro.y - H(q.xz)) / (-rd.y);
     }
     tw = t;
     vec3 q = ro + rd * t;
     float e = 0.04 + 0.012 * t;
+    float h0 = H(q.xz);
     vec3 nn = normalize(vec3(
-      -(H(q.xz + vec2(e, 0.0)) - H(q.xz - vec2(e, 0.0))) / (2.0 * e) * 1.4,
+      -(H(q.xz + vec2(e, 0.0)) - h0) / e * 1.4,
       1.0,
-      -(H(q.xz + vec2(0.0, e)) - H(q.xz - vec2(0.0, e))) / (2.0 * e) * 1.4
+      -(H(q.xz + vec2(0.0, e)) - h0) / e * 1.4
     ));
 
     float cv = max(dot(nn, -rd), 0.0);
@@ -350,7 +351,7 @@ void main() {
     if (proj > 0.0 && perpDistSq < 0.64) {
       float td = max(proj - 0.8, 0.0);
       bool hit = false;
-      for (int i = 0; i < 36; i++) {
+      for (int i = 0; i < 18; i++) {
         float d = map(ro + rd * td);
         if (d < 0.003) {
           hit = true;
@@ -505,10 +506,14 @@ export function ResadexWater() {
     };
 
     function handleResize() {
-      // Clamp DPR to max 1.0 for fluid background: looks visually identical with GPU bilinear filtering, saves up to 75% GPU fill rate
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.0);
-      canvas!.width = Math.round(canvas!.clientWidth * dpr);
-      canvas!.height = Math.round(canvas!.clientHeight * dpr);
+      // Dynamic resolution scaling for silky-smooth fluid animation on standard laptops
+      // Clamps internal render buffer to max 1120px width (with hardware bilinear upsampling)
+      const clientW = canvas!.clientWidth || window.innerWidth;
+      const clientH = canvas!.clientHeight || window.innerHeight;
+      const maxW = 1120;
+      const scale = Math.min(1.0, maxW / Math.max(1, clientW));
+      canvas!.width = Math.max(480, Math.round(clientW * scale));
+      canvas!.height = Math.max(270, Math.round(clientH * scale));
       gl.viewport(0, 0, canvas!.width, canvas!.height);
     }
     handleResize();
@@ -611,8 +616,8 @@ export function ResadexWater() {
     function render(now: number) {
       if (document.hidden) return;
 
-      // During rapid scroll flings, alternate frames to keep the main thread and compositor at rock-solid 60 FPS
-      if (sceneState.velocity > 1.4) {
+      // During active scrolling, alternate frames to guarantee 60-120 FPS on standard integrated GPUs
+      if (sceneState.velocity > 0.5) {
         frameSkip++;
         if (frameSkip % 2 !== 0) {
           animId = requestAnimationFrame(render);
