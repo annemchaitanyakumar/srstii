@@ -120,8 +120,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
-// Applies the saved theme before first paint so dark-mode visitors never see a light flash.
-const THEME_INIT = `try{var t=localStorage.getItem("srsti-theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.classList.add("dark")}}catch(e){}`;
+// Default to day (light) mode. Only apply dark mode if explicitly chosen by the user.
+const THEME_INIT = `try{var t=localStorage.getItem("srsti-theme");if(t==="dark"){document.documentElement.classList.add("dark")}else{document.documentElement.classList.remove("dark")}}catch(e){}`;
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
