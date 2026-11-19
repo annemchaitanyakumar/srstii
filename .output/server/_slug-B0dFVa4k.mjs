@@ -4,7 +4,7 @@ import { _ as require_react, a as AccordionTrigger$1, g as require_jsx_runtime, 
 import { n as PRODUCTS, p as useCart, r as cn, s as formatINR } from "./_ssr/products-BZ1Gg1xG.mjs";
 import { b as Link } from "./_libs/@tanstack/react-router+[...].mjs";
 import { t as Route } from "./_slug-C6_g5Pfl.mjs";
-import { C as Check, S as ChevronDown, _ as Flame, a as ThermometerSnowflake, b as CircleCheck, c as Sparkles, d as Plus, h as MapPin, m as Minus, n as Utensils, r as Truck, s as Star, u as ShieldCheck, v as Droplets, w as ArrowRight, x as ChevronRight, y as Compass } from "./_libs/lucide-react.mjs";
+import { C as Check, S as ChevronDown, T as ArrowRight, _ as Flame, a as ThermometerSnowflake, b as CircleCheck, c as Sparkles, d as Plus, h as MapPin, m as Minus, n as Utensils, r as Truck, s as Star, u as ShieldCheck, v as Droplets, x as ChevronRight, y as Compass } from "./_libs/lucide-react.mjs";
 import { n as Header, t as Footer } from "./_ssr/Header-BApVQKgP.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/_slug-B0dFVa4k.js
 var import_react = /* @__PURE__ */ __toESM(require_react());

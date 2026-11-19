@@ -143,11 +143,12 @@
     }
 
     /* 3D Botanical Oil Ingredient Floating Bits */
-    .hero-bit, .storm-piece {
+    .hero-bit,
+    .storm-piece {
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-      filter: drop-shadow(0 14px 28px rgba(0,0,0,0.42)) drop-shadow(0 4px 10px rgba(0,0,0,0.22));
+      filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.42)) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.22));
     }
 
     /* Fixed WebGL canvas (z-index: 2, pointer-events: none) */
@@ -160,7 +161,7 @@
       pointer-events: none;
     }
 
-    /* NAV - Cart Module Only */
+    /* TOP RIGHT CART MODULE (#nav) */
     #nav {
       position: fixed;
       top: 0;
@@ -173,38 +174,18 @@
       justify-content: flex-end;
       z-index: 50;
       color: var(--ink);
-      transform: translateY(-110%);
-      transition: transform 900ms cubic-bezier(.22, .9, .24, 1), color 400ms ease;
       pointer-events: none;
-    }
-
-    #nav.entered {
-      transform: translateY(0);
-    }
-
-    .nav-right {
-      pointer-events: auto;
-position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: calc(94 * var(--n));
-      padding: 0 calc(37 * var(--n)) 0 calc(42 * var(--n));
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 50;
-      color: var(--ink);
-      transform: translateY(-110%);
-      transition: transform 900ms cubic-bezier(.22, .9, .24, 1), color 400ms ease;
-    }
-
-    #nav.entered {
-      transform: translateY(0);
     }
 
     #nav.dark {
       color: var(--cream);
+    }
+
+    .nav-right {
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      gap: calc(12 * var(--n));
     }
 
     .nav-left {
@@ -485,7 +466,7 @@ position: fixed;
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-      filter: drop-shadow(0 6px 14px rgba(0,0,0,0.32));
+      filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.32));
     }
 
     .hero-bit.bit-0 {
@@ -811,7 +792,7 @@ position: fixed;
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-      filter: drop-shadow(0 14px 28px rgba(0,0,0,0.45)) drop-shadow(0 4px 10px rgba(0,0,0,0.25));
+      filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.45)) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.25));
     }
 
     /* SECTION 3: SHOP */
@@ -1248,7 +1229,6 @@ position: fixed;
   <!-- 1. The WebGL canvas (z-index: 2) -->
   <canvas id="gl"></canvas>
 
-  
   <!-- TOP RIGHT CART MODULE (#nav) -->
   <nav id="nav">
     <div class="nav-right">
@@ -1267,7 +1247,7 @@ position: fixed;
     </div>
   </nav>
 
-<!-- SECTION 1: HERO (#flavors) -->
+  <!-- SECTION 1: HERO (#flavors) -->
   <section id="flavors" class="hero-sec">
     <div class="reveal" id="reveal"></div>
     <div class="rings" id="rings" aria-hidden="true"></div>
@@ -3239,14 +3219,14 @@ position: fixed;
       currentCartCount += increment;
       if (cartBadge) {
         cartBadge.textContent = currentCartCount;
-      cartBadge.classList.add('show');
-      cartBadge.classList.remove('pop');
-      void cartBadge.offsetWidth;
-      cartBadge.classList.add('pop');
+        cartBadge.classList.add('show');
+        cartBadge.classList.remove('pop');
+        void cartBadge.offsetWidth;
+        cartBadge.classList.add('pop');
       }
     }
 
-// Shop Card click & tilt
+    // Shop Card click & tilt
     const cardTilts = Array(5).fill(0).map(() => ({ x: 0, y: 0 }));
     const cardSquashes = Array(5).fill(0).map(() => ({ sx: 1, sy: 1 }));
 

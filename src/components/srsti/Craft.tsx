@@ -219,7 +219,7 @@ export function Craft() {
         {STEPS.map((s) => (
           <article
             key={s.no}
-            className="grid shrink-0 items-center gap-8 px-5 pb-20 md:px-10 lg:h-full lg:w-[78vw] lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:px-[4vw] lg:pb-0"
+            className="grid shrink-0 items-center gap-8 px-5 pb-20 md:px-10 last:pb-6 lg:h-full lg:w-[78vw] lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:px-[4vw] lg:pb-0"
             aria-labelledby={`step-${s.no}`}
           >
             <div className="relative h-[62vh] min-h-[380px] overflow-hidden rounded-[2rem] shadow-glass lg:h-[72vh]">

@@ -4,7 +4,7 @@ import { _ as require_react, g as require_jsx_runtime } from "../_libs/@radix-ui
 import { n as toast } from "../_libs/sonner.mjs";
 import { p as useCart, r as cn } from "./products-BZ1Gg1xG.mjs";
 import { b as Link, p as useLocation } from "../_libs/@tanstack/react-router+[...].mjs";
-import { l as ShoppingBag, o as Sun, p as Moon, w as ArrowRight } from "../_libs/lucide-react.mjs";
+import { T as ArrowRight, l as ShoppingBag, o as Sun, p as Moon } from "../_libs/lucide-react.mjs";
 import { t as stringType } from "../_libs/zod.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/Header-BApVQKgP.js
 var import_react = /* @__PURE__ */ __toESM(require_react());

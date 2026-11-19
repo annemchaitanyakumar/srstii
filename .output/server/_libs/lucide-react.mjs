@@ -141,6 +141,19 @@ var ArrowRight = createLucideIcon("arrow-right", [["path", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var ArrowUpRight = createLucideIcon("arrow-up-right", [["path", {
+	d: "M7 7h10v10",
+	key: "1tivn9"
+}], ["path", {
+	d: "M7 17 17 7",
+	key: "1vkiza"
+}]]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var Check = createLucideIcon("check", [["path", {
 	d: "M20 6 9 17l-5-5",
 	key: "1gmf2c"
@@ -549,4 +562,4 @@ var X = createLucideIcon("x", [["path", {
 	key: "d8bk6v"
 }]]);
 //#endregion
-export { Check as C, ChevronDown as S, ArrowDown as T, Flame as _, ThermometerSnowflake as a, CircleCheck as b, Sparkles as c, Plus as d, Package as f, Funnel as g, MapPin as h, Trash2 as i, ShoppingBag as l, Minus as m, Utensils as n, Sun as o, Moon as p, Truck as r, Star as s, X as t, ShieldCheck as u, Droplets as v, ArrowRight as w, ChevronRight as x, Compass as y };
+export { Check as C, ArrowDown as E, ChevronDown as S, ArrowRight as T, Flame as _, ThermometerSnowflake as a, CircleCheck as b, Sparkles as c, Plus as d, Package as f, Funnel as g, MapPin as h, Trash2 as i, ShoppingBag as l, Minus as m, Utensils as n, Sun as o, Moon as p, Truck as r, Star as s, X as t, ShieldCheck as u, Droplets as v, ArrowUpRight as w, ChevronRight as x, Compass as y };
