@@ -646,11 +646,14 @@
     }
 
     .inside-sec .pin {
-      position: sticky;
+      position: fixed;
       top: 0;
+      left: 0;
+      width: 100vw;
       height: 100svh;
       overflow: hidden;
-      width: 100%;
+      z-index: 1;
+      pointer-events: none;
     }
 
     .in-dark {
@@ -914,7 +917,7 @@
 
     .card.live .pk,
     .gl .card.live .pk {
-      visibility: hidden !important;
+      opacity: 1;
     }
 
     .card-add {
@@ -3060,6 +3063,7 @@
     const inHead = document.getElementById('inHead');
     const inCap = document.getElementById('inCap');
     const inFront = document.getElementById('inFront');
+    const inPin = document.getElementById('inPin');
     const inDark = document.getElementById('inDark');
     const stormLayer = document.getElementById('stormLayer');
     const inBar = document.getElementById('inBar');
@@ -3899,8 +3903,13 @@
       else pinY = 0;
 
       if (inSecR.bottom <= 0 || inSecR.top >= vh) {
+        if (inPin) inPin.style.display = 'none';
         inFront.style.display = 'none';
       } else {
+        if (inPin) {
+          inPin.style.display = 'block';
+          inPin.style.transform = `translateY(${pinY}px)`;
+        }
         inFront.style.display = 'block';
         inFront.style.transform = `translateY(${pinY}px)`;
       }
@@ -4065,6 +4074,9 @@
 
       setBarFlavour(travellerBar, ((jT % 5) + 5) % 5);
       applyBarState(travellerBar, travellerState);
+      if (pkEl && p3 > 0) {
+        pkEl.style.opacity = Math.max(0, 1 - travellerState.op);
+      }
 
       // Real-time Fluid Sloshing Simulation across carousel motion
       const dPos = pos - (window._prevPos !== undefined ? window._prevPos : pos);
@@ -4150,7 +4162,7 @@
         // Restore 2D card pk opacity when leaving Section 3
         shopCards.forEach(c => {
           const pk = c.querySelector('.pk');
-          if (pk && !c.classList.contains('live')) pk.style.opacity = '1';
+          if (pk) pk.style.opacity = '1';
         });
       }
 

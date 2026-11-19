@@ -29,7 +29,7 @@ export function Purity() {
       ref={ref}
       id="purity"
       aria-labelledby="purity-title"
-      className="relative bg-veil px-5 py-28 md:px-10 md:py-40"
+      className="relative bg-veil px-5 pt-8 pb-20 md:px-10 md:pt-12 md:pb-32"
     >
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-6 lg:grid-cols-12 lg:gap-8">

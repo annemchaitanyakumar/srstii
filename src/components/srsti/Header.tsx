@@ -99,38 +99,8 @@ export function Header() {
               </a>
             </li>
           ))}
-          <li>
-            <Link
-              to="/stride"
-              className={cn(
-                "group relative inline-flex items-center gap-1.5 rounded-full border border-gold/40 bg-gold/10 px-3 py-1 font-mono text-xs uppercase tracking-widest text-gold-ink transition-all hover:bg-gold hover:text-white",
-                location.pathname === "/stride" && "bg-gold text-white shadow-gold font-semibold",
-              )}
-            >
-              <span className="size-1.5 rounded-full bg-gold animate-pulse" />
-              Stride 3D
-            </Link>
-          </li>
         </ul>
         <div className="flex items-center gap-1.5">
-          <Link
-            to="/stride"
-            className={cn(
-              "inline-flex md:hidden items-center gap-1.5 rounded-full border border-gold/40 bg-gold/10 px-2.5 py-1 font-mono text-[11px] font-medium text-gold-ink transition-all hover:bg-gold hover:text-white",
-              location.pathname === "/stride" && "bg-gold text-white shadow-gold",
-            )}
-          >
-            <span className="size-1.5 rounded-full bg-gold animate-pulse" />
-            Stride
-          </Link>
-
-          <Link
-            to="/products"
-            className="hidden sm:inline-flex items-center rounded-full border border-glass-border px-3.5 py-1.5 font-mono text-xs text-foreground/80 transition-all hover:border-gold hover:text-gold-ink"
-          >
-            The Pressing Room
-          </Link>
-
           <button
             type="button"
             onClick={(e) => {

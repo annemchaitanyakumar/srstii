@@ -4,8 +4,8 @@ import { _ as require_react, g as require_jsx_runtime } from "../_libs/@radix-ui
 import { n as PRODUCTS, p as useCart, r as cn, s as formatINR } from "./products-BZ1Gg1xG.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { _ as Flame, a as ThermometerSnowflake, b as CircleCheck, c as Sparkles, d as Plus, g as Funnel, u as ShieldCheck, v as Droplets } from "../_libs/lucide-react.mjs";
-import { n as Header, t as Footer } from "./Header-BApVQKgP.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/products-dg_lEaK9.js
+import { n as Header, t as Footer } from "./Header-DQTu930L.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/products-BMIFWBtr.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function ProductsCatalogPage() {

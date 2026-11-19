@@ -46,6 +46,83 @@ const WATER_PALETTES: Record<
   },
 };
 
+export interface WaterPalette {
+  body: [number, number, number];
+  envBottom: [number, number, number];
+  envTop: [number, number, number];
+  envMid: [number, number, number];
+  fog: [number, number, number];
+  dark?: boolean;
+}
+
+export const STRIDE_OIL_PALETTES: Record<number, WaterPalette> = {
+  // 0: Groundnut Oil — Warm Sunlit Amber Liquid Gold
+  0: {
+    body: [0.84, 0.61, 0.24],
+    envBottom: [0.70, 0.48, 0.16],
+    envTop: [0.99, 0.96, 0.90],
+    envMid: [0.82, 0.60, 0.22],
+    fog: [0.96, 0.92, 0.84],
+    dark: false,
+  },
+  // 1: Virgin Coconut Oil — Deep Coastal Emerald Sage Green
+  1: {
+    body: [0.24, 0.44, 0.35],
+    envBottom: [0.15, 0.30, 0.23],
+    envTop: [0.92, 0.97, 0.94],
+    envMid: [0.28, 0.48, 0.38],
+    fog: [0.85, 0.92, 0.89],
+    dark: false,
+  },
+  // 2: Yellow Mustard Oil — Vibrant Rich Mustard Warm Gold
+  2: {
+    body: [0.82, 0.53, 0.10],
+    envBottom: [0.64, 0.39, 0.06],
+    envTop: [0.99, 0.96, 0.88],
+    envMid: [0.79, 0.50, 0.08],
+    fog: [0.96, 0.92, 0.82],
+    dark: false,
+  },
+  // 3: Black Sesame Oil — Deep Roasted Obsidian Sesame
+  3: {
+    body: [0.22, 0.16, 0.13],
+    envBottom: [0.12, 0.08, 0.06],
+    envTop: [0.90, 0.86, 0.82],
+    envMid: [0.18, 0.13, 0.10],
+    fog: [0.55, 0.48, 0.44],
+    dark: true,
+  },
+  // 4: A2 Gir Cow Ghee — Luminous Radiant Clarified Butter Gold
+  4: {
+    body: [0.91, 0.67, 0.20],
+    envBottom: [0.76, 0.53, 0.12],
+    envTop: [1.0, 0.98, 0.90],
+    envMid: [0.89, 0.64, 0.18],
+    fog: [0.98, 0.95, 0.86],
+    dark: false,
+  },
+};
+
+export function colorToWaterPalette(hex: string): WaterPalette {
+  const clean = hex.replace("#", "");
+  const num = parseInt(clean, 16);
+  if (isNaN(num)) return STRIDE_OIL_PALETTES[0]!;
+  const r = ((num >> 16) & 255) / 255;
+  const g = ((num >> 8) & 255) / 255;
+  const b = (num & 255) / 255;
+  const brightness = 0.299 * r + 0.587 * g + 0.114 * b;
+  const isDark = brightness < 0.28;
+
+  return {
+    body: [r, g, b],
+    envBottom: [r * 0.72, g * 0.72, b * 0.72],
+    envTop: [Math.min(1, 0.92 + r * 0.08), Math.min(1, 0.92 + g * 0.08), Math.min(1, 0.92 + b * 0.08)],
+    envMid: [r * 0.92, g * 0.92, b * 0.92],
+    fog: [Math.min(1, 0.80 + r * 0.15), Math.min(1, 0.80 + g * 0.15), Math.min(1, 0.80 + b * 0.15)],
+    dark: isDark,
+  };
+}
+
 const VS = `attribute vec2 p;
 void main(){
   gl_Position = vec4(p, 0.0, 1.0);
@@ -418,6 +495,7 @@ export function ResadexWater() {
     };
 
     let lastMood: Mood = sceneState.mood;
+    const darkSim = { value: sceneState.dark ? 1.0 : 0.0 };
 
     const pointerSim = {
       x: 0,
@@ -480,6 +558,51 @@ export function ResadexWater() {
     };
     window.addEventListener("srsti-water-ripple", onTriggerRipple);
 
+    const onPaletteChange = (e: Event) => {
+      const ce = e as CustomEvent<{ flavourId?: number; color?: string; name?: string; isDefault?: boolean }>;
+      const { flavourId, color, isDefault } = ce.detail || {};
+      const defaultPalette = WATER_PALETTES[sceneState.mood] ?? WATER_PALETTES.drizzle;
+      const target = isDefault
+        ? defaultPalette
+        : flavourId != null && STRIDE_OIL_PALETTES[flavourId]
+        ? STRIDE_OIL_PALETTES[flavourId]!
+        : color
+        ? colorToWaterPalette(color)
+        : defaultPalette;
+
+      gsap.killTweensOf(colors.body);
+      gsap.killTweensOf(colors.envBottom);
+      gsap.killTweensOf(colors.envTop);
+      gsap.killTweensOf(colors.envMid);
+      gsap.killTweensOf(colors.fog);
+      gsap.killTweensOf(darkSim);
+
+      gsap.to(colors.body, { 0: target.body[0], 1: target.body[1], 2: target.body[2], duration: 1.1, ease: "power2.out" });
+      gsap.to(colors.envBottom, { 0: target.envBottom[0], 1: target.envBottom[1], 2: target.envBottom[2], duration: 1.1, ease: "power2.out" });
+      gsap.to(colors.envTop, { 0: target.envTop[0], 1: target.envTop[1], 2: target.envTop[2], duration: 1.1, ease: "power2.out" });
+      gsap.to(colors.envMid, { 0: target.envMid[0], 1: target.envMid[1], 2: target.envMid[2], duration: 1.1, ease: "power2.out" });
+      gsap.to(colors.fog, { 0: target.fog[0], 1: target.fog[1], 2: target.fog[2], duration: 1.1, ease: "power2.out" });
+
+      const targetDark = isDefault ? (sceneState.dark ? 1.0 : 0.0) : (target.dark ? 1.0 : sceneState.dark ? 1.0 : 0.0);
+      gsap.to(darkSim, { value: targetDark, duration: 1.1, ease: "power2.out" });
+
+      // Organic liquid swell ripple on bottle color change inside bottles section
+      if (!isDefault) {
+        pointerSim.x = 0;
+        pointerSim.y = 0.08;
+        pointerSim.age = 0;
+        pointerSim.strength = 1.4;
+        gsap.to(pointerSim, {
+          strength: 0,
+          age: 1.05,
+          duration: 1.05,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+      }
+    };
+    window.addEventListener("srsti-water-palette-change", onPaletteChange);
+
     let animId = 0;
     const t0 = performance.now();
 
@@ -504,7 +627,7 @@ export function ResadexWater() {
 
       gl.uniform1f(uScroll, sceneState.progress);
       gl.uniform1f(uCalm, sceneState.progress > 0.88 ? 1.0 : 0.0);
-      gl.uniform1f(uDark, sceneState.dark ? 1.0 : 0.0);
+      gl.uniform1f(uDark, darkSim.value);
 
       gl.uniform3f(uColorBody, colors.body[0]!, colors.body[1]!, colors.body[2]!);
       gl.uniform3f(uColorEnvBottom, colors.envBottom[0]!, colors.envBottom[1]!, colors.envBottom[2]!);
@@ -544,6 +667,7 @@ export function ResadexWater() {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("pointerdown", onPointerDown);
       window.removeEventListener("srsti-water-ripple", onTriggerRipple);
+      window.removeEventListener("srsti-water-palette-change", onPaletteChange);
       gl.deleteBuffer(buf);
       gl.deleteProgram(pr);
     };

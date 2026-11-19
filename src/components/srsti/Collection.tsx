@@ -80,10 +80,10 @@ export function Collection() {
     <section
       id="collection"
       aria-labelledby="collection-title"
-      className="relative bg-veil px-5 pt-6 pb-16 md:px-10 md:pt-10 md:pb-24"
+      className="relative bg-veil px-5 pt-6 pb-4 md:px-10 md:pt-8 md:pb-6"
     >
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8 md:mb-10 grid gap-6 md:grid-cols-[1.2fr_1fr] md:items-end">
+        <div className="mb-8 md:mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="eyebrow mb-2">The Collection</p>
             <motion.h2
@@ -100,17 +100,12 @@ export function Collection() {
             </span>
           </div>
           <FadeUp delay={0.06}>
-            <div className="space-y-3">
-              <p className="max-w-md text-base md:text-lg leading-relaxed text-muted-foreground">
-                Cold wood-pressed oils and cultured A2 ghee, each from a single farm and harvest. Pure, unrefined, and pressed under 35°C in wooden ghanis.
-              </p>
-              <Link
-                to="/products"
-                className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-gold-ink hover:underline"
-              >
-                View all pressings & bulk tins <ArrowRight className="size-3.5" />
-              </Link>
-            </div>
+            <Link
+              to="/products"
+              className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-gold-ink hover:underline pb-1"
+            >
+              View all pressings & bulk tins <ArrowRight className="size-3.5" />
+            </Link>
           </FadeUp>
         </div>
 
@@ -119,16 +114,6 @@ export function Collection() {
           {FEATURED_PRODUCTS.map((p, i) => (
             <ProductCard key={p.id} product={p} index={i} />
           ))}
-        </div>
-
-        {/* Catalog Banner CTA directing to All Products Page */}
-        <div className="mt-12 text-center">
-          <Link
-            to="/products"
-            className="inline-flex items-center gap-3 rounded-full border border-foreground/25 bg-background/80 px-8 py-3.5 font-mono text-xs uppercase tracking-[0.2em] text-foreground backdrop-blur-md transition-all hover:border-gold hover:bg-gold hover:text-accent-foreground hover:shadow-gold"
-          >
-            Enter The Pressing Room — Explore All 20 Pressings &amp; Tins <ArrowRight className="size-4" />
-          </Link>
         </div>
       </div>
     </section>

@@ -1,4 +1,4 @@
-//#region \0tanstack-start-manifest:v
+//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-CSHdesvo.js
 var tsrStartManifest = () => ({ routes: {
 	__root__: {
 		filePath: "C:/Users/chait/Downloads/LOVE/src/routes/__root.tsx",
@@ -8,44 +8,44 @@ var tsrStartManifest = () => ({ routes: {
 			"/products/$slug",
 			"/products/"
 		],
-		preloads: ["/assets/index-mthgzq5p.js"],
+		preloads: ["/assets/index-gimVSaSG.js"],
 		scripts: [{ attrs: {
 			type: "module",
 			async: !0,
-			src: "/assets/index-mthgzq5p.js"
+			src: "/assets/index-gimVSaSG.js"
 		} }]
 	},
 	"/": {
 		filePath: "C:/Users/chait/Downloads/LOVE/src/routes/index.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/routes-CwvMQjLz.js",
-			"/assets/Header-DTLrmbIo.js",
-			"/assets/AnimatePresence-B7t70onY.js"
+			"/assets/routes-oPhFGepM.js",
+			"/assets/Header-D23d27O6.js",
+			"/assets/AnimatePresence-C7iYd_Sr.js"
 		]
 	},
 	"/stride": {
 		filePath: "C:/Users/chait/Downloads/LOVE/src/routes/stride.tsx",
 		children: void 0,
-		preloads: ["/assets/stride-CyNNDPLI.js"]
+		preloads: ["/assets/stride-BG_Y5nOn.js"]
 	},
 	"/products/$slug": {
 		filePath: "C:/Users/chait/Downloads/LOVE/src/routes/products/$slug.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/_slug-CfUjO-1w.js",
-			"/assets/Header-DTLrmbIo.js",
-			"/assets/AnimatePresence-B7t70onY.js",
-			"/assets/thermometer-snowflake-C6IL92me.js"
+			"/assets/_slug-BHB24e8q.js",
+			"/assets/Header-D23d27O6.js",
+			"/assets/AnimatePresence-C7iYd_Sr.js",
+			"/assets/thermometer-snowflake-CtvXQAEz.js"
 		]
 	},
 	"/products/": {
 		filePath: "C:/Users/chait/Downloads/LOVE/src/routes/products/index.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/products-CtCAYwgN.js",
-			"/assets/Header-DTLrmbIo.js",
-			"/assets/thermometer-snowflake-C6IL92me.js"
+			"/assets/products-C25TxXaL.js",
+			"/assets/Header-D23d27O6.js",
+			"/assets/thermometer-snowflake-CtvXQAEz.js"
 		]
 	}
 } });

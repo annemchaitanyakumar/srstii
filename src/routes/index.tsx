@@ -8,7 +8,9 @@ import { Hero } from "@/components/srsti/Hero";
 import { OilBackdrop } from "@/components/srsti/OilBackdrop";
 import { Purity } from "@/components/srsti/Purity";
 import { Rituals } from "@/components/srsti/Rituals";
+import { StrideShowcase } from "@/components/srsti/StrideShowcase";
 import { WaterTouchRipple } from "@/components/srsti/WaterTouchRipple";
+import { WhyChooseSrsti } from "@/components/srsti/WhyChooseSrsti";
 import { useExperience } from "@/components/srsti/useExperience";
 
 export const Route = createFileRoute("/")({
@@ -43,6 +45,8 @@ function Index() {
       <main id="main">
         <Hero />
         <Craft />
+        <StrideShowcase />
+        <WhyChooseSrsti />
         <Collection />
         <Purity />
         <Rituals />
