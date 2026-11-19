@@ -1,0 +1,1 @@
+import{wt as e}from"./index-ClaE9sZp.js";var t=e();function n(){return(0,t.jsx)(`div`,{className:`fixed inset-0 z-[9999] h-screen w-screen overflow-hidden bg-[#1c1a1f]`,children:(0,t.jsx)(`iframe`,{src:`/stride.html`,title:`Stride Experience`,className:`h-full w-full border-0`,allow:`autoplay; fullscreen`})})}export{n as component};

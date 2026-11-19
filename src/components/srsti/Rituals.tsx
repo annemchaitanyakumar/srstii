@@ -228,7 +228,7 @@ export function Rituals() {
                     onClick={() => select(r.id, i)}
                     onKeyDown={(e) => onKey(e, i)}
                     className={cn(
-                      "relative min-h-11 rounded-full px-4 font-mono text-xs uppercase tracking-wider transition-colors duration-300 md:px-5",
+                      "relative min-h-11 rounded-full px-4 font-display text-sm uppercase tracking-[0.12em] transition-colors duration-300 md:px-5",
                       active === r.id
                         ? "text-white font-semibold"
                         : "text-foreground/75 hover:text-foreground",
@@ -369,14 +369,14 @@ export function Rituals() {
                 <h3 className="font-display text-3xl font-bold leading-[1.02] text-foreground md:text-4xl lg:text-5xl">
                   {current.title}
                 </h3>
-                <p className="mt-4 font-sans text-sm leading-relaxed text-foreground/80 md:mt-5 md:text-base">
+                <p className="mt-4 font-display text-base leading-relaxed text-foreground/80 md:mt-5 md:text-lg">
                   {current.body}
                 </p>
-                <ol className="mt-6 space-y-2.5 font-sans md:space-y-3">
+                <ol className="mt-6 space-y-2.5 font-display md:space-y-3">
                   {current.steps.map((s, i) => (
-                    <li key={s} className="flex items-baseline gap-3 text-sm text-foreground/90 md:text-base">
+                    <li key={s} className="flex items-baseline gap-3 text-base text-foreground/90 md:text-lg">
                       <span className={cn(
-                        "font-mono text-xs font-semibold transition-colors duration-500",
+                        "font-display text-sm font-semibold transition-colors duration-500",
                         current.id === "saute" && "text-zinc-500",
                         current.id === "ritual" && "text-[#8c5332]",
                         current.id === "drizzle" && "text-emerald-700",

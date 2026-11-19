@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { CinematicLoader } from "@/components/srsti/CinematicLoader";
 import { Collection } from "@/components/srsti/Collection";
 import { Craft } from "@/components/srsti/Craft";
 import { Footer } from "@/components/srsti/Footer";
@@ -39,6 +40,7 @@ function Index() {
   useExperience();
   return (
     <>
+      <CinematicLoader />
       <OilBackdrop />
       <WaterTouchRipple />
       <Header />

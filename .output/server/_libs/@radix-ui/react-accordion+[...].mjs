@@ -2169,4 +2169,4 @@ function getState(open) {
 }
 __name(getState, "getState");
 //#endregion
-export { require_react as _, AccordionTrigger as a, Primitive as c, useLayoutEffect2 as d, createSlot as f, require_jsx_runtime as g, require_react_dom as h, AccordionItem as i, dispatchDiscreteCustomEvent as l, createContextScope as m, AccordionContent as n, useId as o, useComposedRefs as p, AccordionHeader as r, Presence as s, Accordion as t, useControllableState as u };
+export { AccordionTrigger as a, require_react as c, AccordionItem as i, AccordionContent as n, require_react_dom as o, AccordionHeader as r, require_jsx_runtime as s, Accordion as t };

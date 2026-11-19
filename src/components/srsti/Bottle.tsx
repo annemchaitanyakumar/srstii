@@ -46,14 +46,14 @@ function makeLabelTexture() {
     ctx.strokeRect(50, 50, 924, 500);
     ctx.fillStyle = "#1A1816";
     ctx.textAlign = "center";
-    ctx.font = '500 168px "Cormorant Garamond", Georgia, serif';
+    ctx.font = '500 168px "EB Garamond", Garamond, Georgia, serif';
     ctx.fillText("S R S T I", 512, 300);
     ctx.fillStyle = "#8A6220";
     ctx.fillRect(452, 340, 120, 2);
-    ctx.font = '600 30px "Plus Jakarta Sans", Arial, sans-serif';
+    ctx.font = '600 30px "EB Garamond", Garamond, Georgia, serif';
     ctx.fillStyle = "#1A1816";
     ctx.fillText("W O O D  ·  P R E S S E D", 512, 410);
-    ctx.font = 'italic 400 40px "Cormorant Garamond", Georgia, serif';
+    ctx.font = 'italic 400 40px "EB Garamond", Garamond, Georgia, serif';
     ctx.fillStyle = "#6B645B";
     ctx.fillText("Liquid Heritage — Batch 2611", 512, 480);
     tex.needsUpdate = true;

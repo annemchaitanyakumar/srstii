@@ -41,9 +41,9 @@ export function Hero() {
           />
         </h1>
 
-        {/* Descriptive editorial lead in clean DM Sans / Aperçu */}
+        {/* Descriptive editorial lead */}
         <motion.p
-          className="mt-7 max-w-xl text-center font-sans text-base font-normal leading-relaxed text-foreground/85 md:text-lg"
+          className="mt-7 max-w-xl text-center font-display text-lg font-normal leading-relaxed text-foreground/85 md:text-xl"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, ease: EASE, delay: 0.85 }}
@@ -54,7 +54,7 @@ export function Hero() {
 
         {/* Chunky pill action CTAs */}
         <motion.div
-          className="mt-10 flex flex-wrap items-center justify-center gap-4"
+          className="mt-10 flex flex-wrap items-center justify-center gap-4 font-display"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, ease: EASE, delay: 1.05 }}
@@ -68,10 +68,10 @@ export function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* Floating Trust Metrics in Graza's typewriter packaging label style */}
+      {/* Floating Trust Metrics */}
       <motion.dl
         style={{ y: yMeta, opacity: fade }}
-        className="glass-panel relative z-10 mx-auto mt-16 grid w-full max-w-4xl grid-cols-3 divide-x divide-foreground/10 rounded-2xl p-5 md:p-6"
+        className="glass-panel relative z-10 mx-auto mt-16 grid w-full max-w-4xl grid-cols-3 divide-x divide-foreground/10 rounded-2xl p-5 md:p-6 font-display"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.1, ease: EASE, delay: 1.25 }}
@@ -81,10 +81,10 @@ export function Hero() {
           ["0%", "SOLVENTS OR BLEACH", "Raw, unrefined purity"],
           ["12 RPM", "NEEM-WOOD GHANI", "Artisanal slow turn"],
         ].map(([v, l, sub]) => (
-          <div key={l} className="px-3 text-center md:px-6">
-            <span className="font-mono text-[10px] font-medium tracking-[0.2em] text-foreground/60">[ {l} ]</span>
+          <div key={l} className="px-3 text-center md:px-6 font-display">
+            <span className="font-display text-xs font-medium tracking-[0.16em] text-foreground/60">[ {l} ]</span>
             <dd className="font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl mt-1">{v}</dd>
-            <p className="mt-1 hidden font-sans text-xs text-foreground/65 md:block">{sub}</p>
+            <p className="mt-1 hidden font-display text-sm text-foreground/65 md:block">{sub}</p>
           </div>
         ))}
       </motion.dl>
@@ -93,7 +93,7 @@ export function Hero() {
       <button
         type="button"
         onClick={() => scrollToTarget("#craft")}
-        className="absolute bottom-6 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-1.5 font-mono text-xs uppercase tracking-[0.3em] text-foreground/70 transition-colors hover:text-foreground md:flex"
+        className="absolute bottom-6 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-1.5 font-display text-xs uppercase tracking-[0.25em] text-foreground/70 transition-colors hover:text-foreground md:flex"
         aria-label="Scroll to the craft story"
       >
         <span>[ SCROLL DOWN ]</span>

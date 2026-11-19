@@ -333,7 +333,7 @@ function generateBottleTexture(fl: HarvestFlavour, isBack: boolean = false): THR
 
     // Tagline / Heritage label
     ctx.fillStyle = "#5C3810";
-    ctx.font = '600 11px "DM Mono", monospace';
+    ctx.font = '600 11px "EB Garamond", Garamond, Georgia, serif';
     ctx.fillText("COLD PRESSED • SINGLE ORIGIN", w * 0.5, lblY + 98);
 
     // Product Title (2 lines)
@@ -349,17 +349,17 @@ function generateBottleTexture(fl: HarvestFlavour, isBack: boolean = false): THR
 
     // Native Harvest Origin Badge
     ctx.fillStyle = "#5C3810";
-    ctx.font = '500 12px "DM Sans", sans-serif';
+    ctx.font = '500 12px "EB Garamond", Garamond, Georgia, serif';
     ctx.fillText(fl.tag.toUpperCase(), w * 0.5, lblY + 225);
 
     // Extraction temp
-    ctx.font = '600 11px "DM Mono", monospace';
+    ctx.font = '600 11px "EB Garamond", Garamond, Georgia, serif';
     ctx.fillStyle = "#C88A2C";
     ctx.fillText("[ NEEM GHANI < 35°C ]", w * 0.5, lblY + 252);
 
     // Volume at bottom
     ctx.fillStyle = "#1C1612";
-    ctx.font = '700 14px "DM Mono", monospace';
+    ctx.font = '700 14px "EB Garamond", Garamond, Georgia, serif';
     ctx.fillText("500 ML", w * 0.5, lblY + lblH - 26);
   } else {
     // BACK LABEL CONTENT (NABL Lab certified purity & batch specs)
@@ -370,7 +370,7 @@ function generateBottleTexture(fl: HarvestFlavour, isBack: boolean = false): THR
     ctx.fillText("CERTIFIED EXTRACTION", w * 0.5, lblY + 38);
 
     ctx.fillStyle = "#5C3810";
-    ctx.font = '500 10px "DM Mono", monospace';
+    ctx.font = '500 10px "EB Garamond", Garamond, Georgia, serif';
     ctx.fillText("NABL ACCREDITED REPORT", w * 0.5, lblY + 56);
 
     ctx.textAlign = "left";
@@ -387,11 +387,11 @@ function generateBottleTexture(fl: HarvestFlavour, isBack: boolean = false): THR
       const label = item[0] || "";
       const val = item[1] || "";
       ctx.fillStyle = "#5C3810";
-      ctx.font = '500 10px "DM Mono", monospace';
+      ctx.font = '500 10px "EB Garamond", Garamond, Georgia, serif';
       ctx.fillText(label, lblX + 22, rowY);
       ctx.textAlign = "right";
       ctx.fillStyle = "#1C1612";
-      ctx.font = '700 10px "DM Mono", monospace';
+      ctx.font = '700 10px "EB Garamond", Garamond, Georgia, serif';
       ctx.fillText(val, lblX + lblW - 22, rowY);
       ctx.textAlign = "left";
       rowY += 26;
@@ -399,7 +399,7 @@ function generateBottleTexture(fl: HarvestFlavour, isBack: boolean = false): THR
 
     ctx.textAlign = "center";
     ctx.fillStyle = "#C88A2C";
-    ctx.font = '600 10px "DM Mono", monospace';
+    ctx.font = '600 10px "EB Garamond", Garamond, Georgia, serif';
     ctx.fillText("[ 100% FARM TRACEABLE ]", w * 0.5, lblY + lblH - 24);
   }
 
@@ -1031,7 +1031,7 @@ export function StrideExperience() {
           <div style="position: absolute; top: 18%; left: 0; right: 0; bottom: 22%; display: flex; align-items: center; justify-content: center;">
             <img src="${fl.image}" alt="${fl.name}" style="max-height: 85%; width: auto; object-fit: contain; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.3));" />
           </div>
-          <div style="position: absolute; bottom: 24px; left: 24px; font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: #FAF4E8;">
+          <div style="position: absolute; bottom: 24px; left: 24px; font-family: var(--font-display); font-size: 13px; font-weight: 700; color: #FAF4E8;">
             ₹${fl.price} <span style="font-size: 10px; font-weight: 400; opacity: 0.7;">/ ${fl.volume}</span>
           </div>
           <button class="card-add" aria-label="Add ${fl.name} to cart" style="position: absolute; bottom: 18px; right: 18px; width: 44px; height: 44px; border-radius: 50%; background: #FAF4E8; color: #1C1612; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; transition: transform 0.2s ease;">
@@ -1097,7 +1097,7 @@ export function StrideExperience() {
           thumbBtn.style.setProperty("--card-color", fl.color);
           thumbBtn.innerHTML = `
             <img src="${fl.image}" alt="${fl.name}" style="height: 48px; width: auto; object-fit: contain;" />
-            <span style="font-family: var(--font-mono); font-size: 11px; font-weight: 600; margin-top: 4px;">${fl.name}</span>
+            <span style="font-family: var(--font-display); font-size: 11px; font-weight: 600; margin-top: 4px;">${fl.name}</span>
             ${countForFl > 0 ? `<span class="thumb-badge">${countForFl}</span>` : ""}
           `;
           thumbBtn.addEventListener("click", () => {
@@ -1160,7 +1160,7 @@ export function StrideExperience() {
               }
             }
           });
-          openCart();
+          window.location.assign("/cart");
         }
       });
     }
@@ -1416,7 +1416,7 @@ export function StrideExperience() {
             className="nav-chip basket-chip"
             id="basketChip"
             aria-label="View Cart"
-            onClick={openCart}
+            onClick={() => window.location.assign("/cart")}
           >
             <svg
               viewBox="0 0 24 24"
@@ -1434,7 +1434,7 @@ export function StrideExperience() {
               {count}
             </span>
           </button>
-          <Link to="/" className="dibs-btn font-mono text-xs">
+          <Link to="/" className="dibs-btn font-display text-xs">
             Classic View
           </Link>
         </div>
@@ -1517,7 +1517,7 @@ export function StrideExperience() {
           aria-live="polite"
         ></h1>
 
-        <div id="count" className="hero-count disp font-mono">
+        <div id="count" className="hero-count disp font-display">
           01
         </div>
 
@@ -1545,7 +1545,7 @@ export function StrideExperience() {
               <polygon points="7,5 19,12 7,19"></polygon>
             </svg>
           </span>
-          <span className="auto-label font-mono">AUTOPLAY</span>
+          <span className="auto-label font-display">AUTOPLAY</span>
         </button>
       </section>
 
@@ -1554,7 +1554,7 @@ export function StrideExperience() {
         <div className="pin" id="inPin">
           <div className="in-dark" id="inDark"></div>
           <div className="in-frame in-back-frame">
-            <div className="in-num disp font-mono" id="inNum">
+            <div className="in-num disp font-display" id="inNum">
               01
             </div>
             <div id="inBar" className="in-bar-placeholder"></div>
@@ -1661,7 +1661,7 @@ export function StrideExperience() {
           </div>
 
           <div
-            className="in-cap font-mono"
+            className="in-cap font-display"
             id="inCap"
             style={{ letterSpacing: "0.15em" }}
           >
@@ -1686,10 +1686,6 @@ export function StrideExperience() {
               <span className="line-inner">PRESSINGS</span>
             </span>
           </h2>
-          <div className="shop-cap font-sans" id="shopCap">
-            Five artisanal pressings. Single-origin Indian harvests.<br />
-            Slow-turned in wooden ghanis below 35°C.
-          </div>
           <div className="shop-grid" id="shopGrid">
             {/* Populated dynamically */}
           </div>
@@ -1777,7 +1773,7 @@ export function StrideExperience() {
           <div className="buy-row">
             <button id="buy" className="buy-btn" disabled>
               <span className="buy-text font-display text-lg">Pick 1 more bottle</span>
-              <span className="buy-price font-mono font-bold">Save ₹150</span>
+              <span className="buy-price font-display font-bold">Save ₹150</span>
             </button>
           </div>
         </div>

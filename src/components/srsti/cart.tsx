@@ -124,8 +124,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
       toast.success(`${product.name} added to your basket`, {
         description: `${vol} · Batch ${product.trace.batch}`,
+        action: {
+          label: "View Basket",
+          onClick: () => {
+            window.location.assign("/cart");
+          },
+        },
       });
-      setIsCartOpen(true);
     },
     [],
   );

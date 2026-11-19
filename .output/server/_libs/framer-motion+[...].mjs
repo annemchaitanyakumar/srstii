@@ -1,5 +1,5 @@
 import { n as __toESM } from "../_runtime.mjs";
-import { _ as require_react, g as require_jsx_runtime } from "./@radix-ui/react-accordion+[...].mjs";
+import { c as require_react, s as require_jsx_runtime } from "./@radix-ui/react-accordion+[...].mjs";
 
 //#region node_modules/unenv/dist/runtime/_internal/utils.mjs
 /*@__NO_SIDE_EFFECTS__*/

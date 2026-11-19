@@ -10,7 +10,7 @@ import { useTheme } from "./useTheme";
 
 export function Header() {
   const { dark, toggle } = useTheme();
-  const { count, openCart } = useCart();
+  const { count } = useCart();
   const { scrollY } = useScroll();
   const [solid, setSolid] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -68,7 +68,7 @@ export function Header() {
             <Link
               to="/products"
               className={cn(
-                "group relative py-2 font-mono text-xs uppercase tracking-widest transition-colors hover:text-foreground",
+                "group relative py-2 font-display text-sm uppercase tracking-[0.14em] transition-colors hover:text-foreground",
                 location.pathname.startsWith("/products")
                   ? "text-gold-ink font-semibold"
                   : "text-foreground/80",
@@ -92,7 +92,7 @@ export function Header() {
               <a
                 href={l.href}
                 onClick={(e) => handleSectionClick(e, l.hash)}
-                className="group relative py-2 font-mono text-xs uppercase tracking-widest text-foreground/80 transition-colors hover:text-foreground"
+                className="group relative py-2 font-display text-sm uppercase tracking-[0.14em] text-foreground/80 transition-colors hover:text-foreground"
               >
                 {l.label}
                 <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-gold transition-transform duration-500 group-hover:scale-x-100" />
@@ -128,10 +128,9 @@ export function Header() {
               strokeWidth={1.4}
             />
           </button>
-          <button
-            type="button"
+          <Link
+            to="/cart"
             aria-label={`Harvest Basket, ${count} ${count === 1 ? "item" : "items"}`}
-            onClick={openCart}
             className="relative grid size-11 place-items-center rounded-full transition-colors hover:bg-foreground/5 cursor-pointer"
           >
             <ShoppingBag className="size-5" strokeWidth={1.4} />
@@ -145,7 +144,7 @@ export function Header() {
                 {count}
               </motion.span>
             )}
-          </button>
+          </Link>
         </div>
       </nav>
     </motion.header>

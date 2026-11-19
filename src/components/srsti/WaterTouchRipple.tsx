@@ -20,7 +20,6 @@ void main() {
   float totalDhy = 0.0;
   float totalH = 0.0;
   float totalFade = 0.0;
-  float maxAlpha = 0.0;
 
   for (int i = 0; i < 4; i++) {
     if (uStrengths[i] < 0.01) continue;
@@ -29,92 +28,98 @@ void main() {
 
     vec2 delta = coord - uCenters[i];
     float dist = length(delta);
-    // High-efficiency distance culling: discard calculations outside wave envelope radius
-    if (dist > 460.0) continue;
 
-    // Ultra-slow, serene liquid expansion (zen slow-motion)
-    float speed = 75.0;
+    // Infinite propagation — wave travels outward freely across the screen without any circular boundary
+    float speed = 220.0;
     float front = t * speed;
     float dDist = dist - front;
 
-    // Massive, giant rolling water wave (wavelength 380px: majestic single swell)
-    float wavelength = 380.0;
-    float phase = dDist / wavelength * 6.28318;
-    float packetWidth = 120.0 + t * 260.0; // Naturally blooms outward from touch point
+    // Organic wavelength and wave packet width
+    float wavelength = 340.0;
+    float phase = (dDist / wavelength) * 6.28318;
+    float packetWidth = 140.0 + t * 260.0;
 
-    // Smooth asymmetric wave envelope
+    // Smooth asymmetric wave packet envelope
     float ahead = max(dDist, 0.0);
     float behind = min(dDist, 0.0);
-    float envDist = (ahead * 1.4 + abs(behind) * 0.7) / packetWidth;
+    float envDist = (ahead * 1.35 + abs(behind) * 0.7) / packetWidth;
 
-    // Organic liquid attack and release:
-    // Smooth ease-in from 0.0, peaks smoothly, eases down seamlessly to exact 0.0 by t=0.95
-    float easeIn = smoothstep(0.0, 0.20, t);
-    float easeOut = 1.0 - smoothstep(0.45, 0.95, t);
+    // Gentle physical distance decay so waves naturally settle across space
+    float distDecay = 1.0 / (1.0 + dist * 0.0014);
+
+    // Organic liquid attack and release (smooth ease-in and ease-out)
+    float easeIn = smoothstep(0.0, 0.18, t);
+    float easeOut = 1.0 - smoothstep(0.42, 0.98, t);
     float envTime = easeIn * easeOut;
     totalFade = max(totalFade, envTime);
 
-    float envelope = exp(-envDist * envDist * 0.7) * envTime * uStrengths[i];
+    // Wave envelope: continuous Gaussian decay, mathematically vanishes without any boundary
+    float envelope = exp(-envDist * envDist * 0.75) * envTime * uStrengths[i] * distDecay;
     float wave = cos(phase) * envelope;
 
-    // Massive, calm central fluid swell (starts and ends at exact 0.0)
-    float coreDist = dist / 140.0;
+    // Calm central fluid depression / swell
+    float coreDist = dist / 150.0;
     float coreEnv = exp(-coreDist * coreDist) * envTime * uStrengths[i];
-    float core = -sin(clamp(t / 0.95, 0.0, 1.0) * 3.14159) * coreEnv * 1.2;
+    float core = -sin(clamp(t / 0.98, 0.0, 1.0) * 3.14159) * coreEnv * 1.2;
 
-    float h = wave * 2.5 + core * 1.3;
+    float h = wave * 2.4 + core * 1.2;
     totalH += h;
 
-    // Exact analytical spatial derivatives for physical surface normals
-    float dEnv = -1.4 * (dDist / (packetWidth * packetWidth)) * envelope;
-    float dWave = (-sin(phase) * (6.28318 / wavelength) * envelope + cos(phase) * dEnv) * 2.5;
-    float dCore = (-2.0 * dist / (140.0 * 140.0) * core) * 1.3;
+    // Analytical spatial derivatives for surface normals
+    float dEnv = -1.5 * (dDist / (packetWidth * packetWidth)) * envelope;
+    float dWave = (-sin(phase) * (6.28318 / wavelength) * envelope + cos(phase) * dEnv) * 2.4;
+    float dCore = (-2.0 * dist / (150.0 * 150.0) * core) * 1.2;
     float dhdr = dWave + dCore;
 
     vec2 dir = dist > 0.001 ? delta / dist : vec2(0.0);
     totalDhx += dhdr * dir.x;
     totalDhy += dhdr * dir.y;
-
-    float slope = abs(dhdr);
-    float alphaContrib = (abs(h) * 1.4 + slope * 26.0) * envTime;
-    maxAlpha = max(maxAlpha, alphaContrib);
   }
 
-  if (maxAlpha < 0.001 || totalFade < 0.001) {
+  if (totalFade < 0.0005) {
     gl_FragColor = vec4(0.0);
     return;
   }
 
-  // Physical 3D surface normal from wave gradients (smooth, broad)
-  vec3 N = normalize(vec3(-totalDhx * 22.0, -totalDhy * 22.0, 1.0));
+  float slopeMag = length(vec2(totalDhx, totalDhy));
+
+  // WAVE DISTURBANCE:
+  // Exactly 0.0 on calm/flat water. Flat water is 100% transparent (no gray veil, no bubble disc).
+  // Only the active crests and troughs of the wave catch light and cast refraction.
+  float disturbance = clamp(slopeMag * 22.0 + abs(totalH) * 0.7, 0.0, 1.0);
+  if (disturbance < 0.0005) {
+    gl_FragColor = vec4(0.0);
+    return;
+  }
+
+  // Physical 3D surface normal
+  vec3 N = normalize(vec3(-totalDhx * 24.0, -totalDhy * 24.0, 1.0));
   vec3 L = normalize(LD);
   vec3 V = vec3(0.0, 0.0, 1.0);
   vec3 R = reflect(-V, N);
 
-  // Wide, silky caustic crest sheen for a massive rolling wave
-  float spec = pow(max(dot(R, L), 0.0), 16.0) * 1.6;
-  float broadSpec = pow(max(dot(R, L), 0.0), 4.0) * 0.5;
+  // Crest specular sheens (sharp and broad)
+  float spec = pow(max(dot(R, L), 0.0), 18.0) * 1.8;
+  float broadSpec = pow(max(dot(R, L), 0.0), 5.0) * 0.6;
 
-  // Physical Fresnel reflection for pure clear water (index of refraction ~ 1.33)
+  // Fresnel reflection on curved wave slopes (0 on flat surface viewed straight-on)
   float nv = max(dot(N, V), 0.0);
-  float F = 0.02 + 0.98 * pow(1.0 - nv, 3.5);
+  float fresnelTilt = pow(1.0 - nv, 3.0) * 1.5;
 
-  // Subtle refraction shadow in the wave trough (light deflection)
+  // Refraction shadow in wave troughs
   float lightDot = dot(N, L);
-  float slopeMag = length(vec2(totalDhx, totalDhy));
-  float troughShadow = smoothstep(0.48, -0.25, lightDot) * clamp(slopeMag * 24.0, 0.0, 1.0) * 0.28;
+  float troughShadow = smoothstep(0.48, -0.25, lightDot) * clamp(slopeMag * 24.0, 0.0, 1.0) * 0.32;
 
-  // 100% TRANSPARENT WATER: ZERO GREEN, ZERO COLOR PIGMENT
-  // Pure brilliant white highlights for crests, soft crystal glass rim, subtle neutral refraction in troughs
+  // Crystal clear liquid palette
   vec3 highlightCol = vec3(1.0, 1.0, 1.0);
-  vec3 shadowCol = vec3(0.08, 0.10, 0.14); // Delicate neutral refraction depth
+  vec3 shadowCol = vec3(0.06, 0.08, 0.12);
 
-  float highlight = spec * 1.1 + broadSpec * 0.8 + F * 0.4;
+  float highlight = spec * 1.2 + broadSpec * 0.8 + fresnelTilt;
   vec3 rgb = mix(highlightCol, shadowCol, troughShadow / (highlight + troughShadow + 0.001));
 
-  // Transparent alpha: explicitly multiplied by totalFade so the entire ripple (highlights, caustics, shadows)
-  // smoothly and seamlessly dissolves to exact 0.0000 before the end of the duration
-  float rawAlpha = highlight * 0.85 + troughShadow * 0.35;
+  // Opacity is tied directly to wave disturbance:
+  // As the wave flattens out, disturbance smoothly reaches 0.0, seamlessly dissolving with zero visible edge!
+  float rawAlpha = (highlight * 0.92 + troughShadow * 0.38) * disturbance;
   float alpha = clamp(rawAlpha * totalFade, 0.0, 0.88);
 
   if (alpha < 0.0005) {
@@ -122,7 +127,7 @@ void main() {
     return;
   }
 
-  // Premultiplied alpha: crystal-clear transparent water overlay
+  // Premultiplied alpha
   gl_FragColor = vec4(rgb * alpha, alpha);
 }`;
 
@@ -230,32 +235,8 @@ export function WaterTouchRipple() {
         gl!.uniform1fv(uTimes, new Float32Array(timesArr));
         gl!.uniform1fv(uStrengths, new Float32Array(strengthsArr));
 
-        // Hardware scissor rect: restrict GPU rasterization to the union bounding box of active ripples
-        let minX = canvas!.width;
-        let minY = canvas!.height;
-        let maxX = 0;
-        let maxY = 0;
-        const maxR = 460 * dpr;
-
-        for (let i = 0; i < Math.min(4, activeRipples.length); i++) {
-          const rip = activeRipples[i]!;
-          const rx = rip.x * dpr;
-          const ry = rip.y * dpr;
-          minX = Math.max(0, Math.min(minX, rx - maxR));
-          minY = Math.max(0, Math.min(minY, ry - maxR));
-          maxX = Math.min(canvas!.width, Math.max(maxX, rx + maxR));
-          maxY = Math.min(canvas!.height, Math.max(maxY, ry + maxR));
-        }
-
-        const boxW = Math.max(0, maxX - minX);
-        const boxH = Math.max(0, maxY - minY);
-
-        if (boxW > 0 && boxH > 0) {
-          gl!.enable(gl!.SCISSOR_TEST);
-          gl!.scissor(minX, minY, boxW, boxH);
-          gl!.drawArrays(gl!.TRIANGLE_STRIP, 0, 4);
-          gl!.disable(gl!.SCISSOR_TEST);
-        }
+        // Infinite screen-wide rendering: wave travels without any spatial bounding or clipping
+        gl!.drawArrays(gl!.TRIANGLE_STRIP, 0, 4);
 
         if (!document.hidden) {
           animId = requestAnimationFrame(renderLoop);

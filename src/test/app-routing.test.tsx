@@ -30,4 +30,20 @@ describe("App routing", () => {
 
     expect(matches.at(-1)?.routeId).toBe("/products/$slug");
   });
+
+  it("matches /cart page", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+
+    const matches = router.matchRoutes("/cart");
+
+    expect(matches.at(-1)?.routeId).toBe("/cart");
+  });
+
+  it("matches /checkout page", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+
+    const matches = router.matchRoutes("/checkout");
+
+    expect(matches.at(-1)?.routeId).toBe("/checkout");
+  });
 });

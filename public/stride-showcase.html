@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap"
+    href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap"
     rel="stylesheet">
   <script>
     if (window.parent && window.parent !== window) {
@@ -66,7 +66,7 @@
     }
 
     @font-face {
-      font-family: 'Archivo Black';
+      font-family: 'EB Garamond';
       font-style: normal;
       font-weight: 400;
       font-display: swap;
@@ -74,7 +74,7 @@
     }
 
     @font-face {
-      font-family: 'DM Mono';
+      font-family: 'EB Garamond';
       font-style: normal;
       font-weight: 400;
       font-display: swap;
@@ -82,7 +82,7 @@
     }
 
     @font-face {
-      font-family: 'DM Mono';
+      font-family: 'EB Garamond';
       font-style: normal;
       font-weight: 500;
       font-display: swap;
@@ -90,7 +90,7 @@
     }
 
     @font-face {
-      font-family: 'Inter';
+      font-family: 'EB Garamond';
       font-style: normal;
       font-weight: 100 900;
       font-display: swap;
@@ -131,7 +131,7 @@
       scroll-behavior: auto;
       background: var(--cream);
       color: var(--ink);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: 'EB Garamond', Garamond, Georgia, serif;
       text-size-adjust: 100%;
       -webkit-text-size-adjust: 100%;
     }
@@ -156,7 +156,7 @@
     }
 
     .disp {
-      font-family: 'Archivo Black', sans-serif;
+      font-family: 'EB Garamond', Garamond, Georgia, serif;
       text-transform: uppercase;
       letter-spacing: -0.01em;
       line-height: 0.92;
@@ -280,7 +280,7 @@
     }
 
     .brand-name {
-      font-family: 'Inter', sans-serif;
+      font-family: 'EB Garamond', Garamond, Georgia, serif;
       font-weight: 800;
       font-size: calc(15.5 * var(--n));
       letter-spacing: 0.06em;
@@ -330,7 +330,7 @@
       z-index: 2;
       padding: calc(8 * var(--n)) calc(18 * var(--n));
       border-radius: 9999px;
-      font-family: 'Inter', sans-serif;
+      font-family: 'EB Garamond', Garamond, Georgia, serif;
       font-size: calc(14.5 * var(--n));
       font-weight: 500;
       color: inherit;
@@ -356,7 +356,7 @@
       justify-content: center;
       padding: 0 calc(16 * var(--n));
       border-radius: 9999px;
-      font-family: 'DM Mono', monospace;
+      font-family: 'EB Garamond', Garamond, Georgia, serif;
       font-size: calc(12 * var(--n));
       font-weight: 500;
       border: 1.5px solid currentColor;
@@ -384,7 +384,7 @@
       right: -4px;
       background: var(--ink);
       color: #ffffff;
-      font-family: 'DM Mono', monospace;
+      font-family: 'EB Garamond', Garamond, Georgia, serif;
       font-size: 10.5px;
       font-weight: 500;
       line-height: 1;
@@ -430,7 +430,7 @@
       height: calc(37 * var(--n));
       padding: 0 calc(20 * var(--n));
       border-radius: 9999px;
-      font-family: 'Inter', sans-serif;
+      font-family: 'EB Garamond', Garamond, Georgia, serif;
       font-size: calc(14.5 * var(--n));
       font-weight: 600;
       border: none;
@@ -683,7 +683,7 @@
     }
 
     .auto-label {
-      font-family: 'DM Mono', monospace;
+      font-family: 'EB Garamond', Garamond, Georgia, serif;
       font-weight: 500;
       font-size: 11px;
       letter-spacing: 0.14em;
@@ -821,7 +821,7 @@
       position: absolute;
       right: 42px;
       top: 596px;
-      font-family: 'DM Mono', monospace;
+      font-family: 'EB Garamond', Garamond, Georgia, serif;
       font-size: 14px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
@@ -895,7 +895,7 @@
       position: absolute;
       left: calc(1128 * var(--w));
       top: calc(132 * var(--w));
-      font-family: 'DM Mono', monospace;
+      font-family: 'EB Garamond', Garamond, Georgia, serif;
       font-size: calc(15.5 * var(--w));
       line-height: 1.42;
       color: var(--ink);
@@ -1398,9 +1398,7 @@
         <span class="line-mask"><span class="line-inner">COLD</span></span><br>
         <span class="line-mask"><span class="line-inner">PRESSED</span></span>
       </h2>
-      <div class="shop-cap" id="shopCap">
-        Five single-origin oils.<br>Neem-wood ghani pressed.<br>Pick your kitchen favourite.
-      </div>
+      <div class="shop-cap" id="shopCap" style="display: none;" aria-hidden="true"></div>
       <div class="shop-grid" id="shopGrid">
         <!-- 5 cards -->
       </div>
@@ -2753,7 +2751,7 @@
       ctx.fillStyle = '#221910';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.font = '600 58px "Cinzel", "Playfair Display", serif';
+      ctx.font = '600 58px "EB Garamond", Garamond, Georgia, serif';
       ctx.letterSpacing = '18px';
       ctx.fillText('S R S T I', w / 2, 145);
 
@@ -2767,13 +2765,13 @@
 
       // 3. Category Tag
       ctx.fillStyle = '#6e5a45';
-      ctx.font = '500 24px "DM Mono", monospace';
+      ctx.font = '500 24px "EB Garamond", Garamond, Georgia, serif';
       ctx.letterSpacing = '6px';
       ctx.fillText('COLD PRESSED', w / 2, 230);
 
       // 4. Product Title
       ctx.fillStyle = '#1c150e';
-      ctx.font = '700 46px "Playfair Display", "Cinzel", serif';
+      ctx.font = '700 46px "EB Garamond", Garamond, Georgia, serif';
       ctx.letterSpacing = '3px';
       ctx.fillText(fl.name.toUpperCase(), w / 2, 288);
 
@@ -2782,12 +2780,12 @@
 
       // 6. Subtitle & Volume
       ctx.fillStyle = '#6e5a45';
-      ctx.font = '500 22px "DM Mono", monospace';
+      ctx.font = '500 22px "EB Garamond", Garamond, Georgia, serif';
       ctx.letterSpacing = '5px';
       ctx.fillText('PURE BY NATURE', w / 2, 745);
 
       ctx.fillStyle = '#261e16';
-      ctx.font = '600 28px "DM Mono", monospace';
+      ctx.font = '600 28px "EB Garamond", Garamond, Georgia, serif';
       ctx.letterSpacing = '3px';
       ctx.fillText(fl.vol, w / 2, 815);
 
@@ -2821,12 +2819,12 @@
 
       ctx.fillStyle = '#241c14';
       ctx.textAlign = 'center';
-      ctx.font = '600 36px "Cinzel", "Playfair Display", serif';
+      ctx.font = '600 36px "EB Garamond", Garamond, Georgia, serif';
       ctx.letterSpacing = '8px';
       ctx.fillText('SRSTI PURITY ASSURANCE', w / 2, 115);
 
       ctx.fillStyle = '#7a654d';
-      ctx.font = '500 20px "DM Mono", monospace';
+      ctx.font = '500 20px "EB Garamond", Garamond, Georgia, serif';
       ctx.letterSpacing = '4px';
       ctx.fillText('VAAGAI NEEM-WOOD GHANI PROTOCOL', w / 2, 155);
 
@@ -2851,7 +2849,7 @@
 
       ctx.textAlign = 'left';
       ctx.fillStyle = '#241c14';
-      ctx.font = '600 20px "DM Mono", monospace';
+      ctx.font = '600 20px "EB Garamond", Garamond, Georgia, serif';
       ctx.letterSpacing = '1px';
       ctx.fillText('EXTRACTION METHOD:  Vaagai Neem-Wood Chekku', bX + 28, bY + 40);
       ctx.fillText('EXTRACTION TEMP:    < 35°C (True Raw Cold Press)', bX + 28, bY + 75);
@@ -2869,11 +2867,11 @@
       ctx.stroke();
 
       ctx.fillStyle = '#1c1610';
-      ctx.font = '700 24px "Cinzel", serif';
+      ctx.font = '700 24px "EB Garamond", Garamond, Georgia, serif';
       ctx.letterSpacing = '3px';
       ctx.fillText('NUTRITION INFORMATION', bX + 28, nY + 40);
 
-      ctx.font = '400 17px "DM Mono", monospace';
+      ctx.font = '400 17px "EB Garamond", Garamond, Georgia, serif';
       ctx.fillStyle = '#7a654d';
       ctx.fillText('Typical Values per 100 ml', bX + 28, nY + 70);
 
@@ -2890,7 +2888,7 @@
 
       nutRows.forEach(([lbl, val], idx) => {
         const rowY = nY + 105 + idx * 28;
-        ctx.font = idx < 2 ? '600 17px "DM Mono", monospace' : '400 16px "DM Mono", monospace';
+        ctx.font = idx < 2 ? '600 17px "EB Garamond", Garamond, Georgia, serif' : '400 16px "EB Garamond", Garamond, Georgia, serif';
         ctx.fillStyle = idx === 5 || idx === 6 ? '#2e6b48' : '#241c14';
         ctx.textAlign = 'left';
         ctx.fillText(lbl, bX + 28, rowY);
@@ -2910,12 +2908,12 @@
       const certY = 760;
       ctx.textAlign = 'center';
       ctx.fillStyle = '#2b6b47';
-      ctx.font = '700 20px "DM Mono", monospace';
+      ctx.font = '700 20px "EB Garamond", Garamond, Georgia, serif';
       ctx.letterSpacing = '2px';
       ctx.fillText('✓ 100% NABL ACCREDITED LAB TESTED', w / 2, certY);
 
       ctx.fillStyle = '#6b5843';
-      ctx.font = '400 16px "Inter", sans-serif';
+      ctx.font = '400 16px "EB Garamond", Garamond, Georgia, serif';
       ctx.letterSpacing = '1px';
       ctx.fillText('Zero Adulteration · Zero Added Solvents · Zero Heat', w / 2, certY + 30);
 
@@ -2944,11 +2942,11 @@
         ctx.fillRect(barX, bcY + 6, bw, bcH - 22);
         barX += bw + gap;
       }
-      ctx.font = '500 14px "DM Mono", monospace';
+      ctx.font = '500 14px "EB Garamond", Garamond, Georgia, serif';
       ctx.fillText('FSSAI LIC. NO. 10021043000128', w / 2, bcY + bcH - 6);
 
       ctx.fillStyle = '#8a735c';
-      ctx.font = '400 15px "DM Mono", monospace';
+      ctx.font = '400 15px "EB Garamond", Garamond, Georgia, serif';
       ctx.letterSpacing = '3px';
       ctx.fillText('TRADITIONAL WOODEN GHANI · BATCH ' + (fl.id + 1) + '092', w / 2, 940);
 
@@ -2959,10 +2957,10 @@
     async function loadAssetsAndBuildTextures() {
       // 1. Await fonts
       await Promise.all([
-        document.fonts.load('400 16px "Archivo Black"'),
-        document.fonts.load('400 16px "DM Mono"'),
-        document.fonts.load('500 16px "DM Mono"'),
-        document.fonts.load('700 16px "Inter"')
+        document.fonts.load('400 16px "EB Garamond"'),
+        document.fonts.load('400 16px "EB Garamond"'),
+        document.fonts.load('500 16px "EB Garamond"'),
+        document.fonts.load('700 16px "EB Garamond"')
       ]);
 
       // 2. Build textures for all 5 oils
@@ -3093,7 +3091,7 @@
     const measCtx = measCanvas.getContext('2d');
 
     function updateTitleSize(name) {
-      measCtx.font = '400 100px "Archivo Black"';
+      measCtx.font = '400 100px "EB Garamond"';
       const w = measCtx.measureText(name).width || 1;
       const isPhone = window.innerWidth < 820;
       const titleEl = document.getElementById('title');
