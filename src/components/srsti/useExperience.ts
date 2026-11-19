@@ -32,7 +32,7 @@ export function useExperience() {
     const onNativeScroll = () => updateScroll(window.scrollY);
 
     if (!reduce.matches) {
-      lenis = new Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 0.9 });
+      lenis = new Lenis({ lerp: 0.14, smoothWheel: true, wheelMultiplier: 1.0 });
       scrollRef.lenis = lenis;
       lenis.on("scroll", (l: Lenis) => {
         ScrollTrigger.update();
@@ -40,7 +40,7 @@ export function useExperience() {
       });
       tick = (time: number) => lenis?.raf(time * 1000);
       gsap.ticker.add(tick);
-      gsap.ticker.lagSmoothing(0);
+      gsap.ticker.lagSmoothing(500, 33);
     } else {
       window.addEventListener("scroll", onNativeScroll, { passive: true });
     }
@@ -48,13 +48,28 @@ export function useExperience() {
 
     // velocity decays when scrolling stops
     const decay = gsap.ticker.add(() => {
-      sceneState.velocity *= 0.94;
+      if (sceneState.velocity > 0.001) {
+        sceneState.velocity *= 0.94;
+      } else if (sceneState.velocity !== 0) {
+        sceneState.velocity = 0;
+      }
     });
 
+    let pointerTicking = false;
+    let pendingPointerEvent: PointerEvent | null = null;
     const onPointer = (e: PointerEvent) => {
-      sceneState.pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
-      sceneState.pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
-      sceneState.pointer.moved = true;
+      pendingPointerEvent = e;
+      if (!pointerTicking) {
+        pointerTicking = true;
+        requestAnimationFrame(() => {
+          if (pendingPointerEvent) {
+            sceneState.pointer.x = (pendingPointerEvent.clientX / window.innerWidth) * 2 - 1;
+            sceneState.pointer.y = -(pendingPointerEvent.clientY / window.innerHeight) * 2 + 1;
+            sceneState.pointer.moved = true;
+          }
+          pointerTicking = false;
+        });
+      }
     };
     const onDown = (e: PointerEvent) => {
       onPointer(e);

@@ -11,9 +11,13 @@ export function StrideShowcase() {
 
   useEffect(() => {
     let rafId: number;
+    const isVisibleRef = { current: false };
 
     const updateProgress = () => {
       if (!containerRef.current || !iframeRef.current) return;
+      // Skip layout calculation and cross-window messaging when section is not in viewport
+      if (!isVisibleRef.current) return;
+
       const rect = containerRef.current.getBoundingClientRect();
       const total = rect.height - window.innerHeight;
       if (total <= 0) return;
@@ -63,6 +67,28 @@ export function StrideShowcase() {
       rafId = requestAnimationFrame(updateProgress);
     };
 
+    // Sleep 3D Three.js engine when outside the viewport; resume smoothly with 300px margin
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const visible = entry.isIntersecting;
+        isVisibleRef.current = visible;
+        try {
+          const cw = iframeRef.current?.contentWindow;
+          if (cw) {
+            cw.postMessage({ type: visible ? "STRIDE_RESUME" : "STRIDE_PAUSE" }, "*");
+          }
+        } catch {}
+        if (visible) {
+          updateProgress();
+        }
+      },
+      { rootMargin: "300px 0px 300px 0px" }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
     const handleFlavourUpdate = (data: { flavourId?: number; color?: string }) => {
       if (data.flavourId != null && data.color) {
         currentFlavourRef.current = {
@@ -100,6 +126,7 @@ export function StrideShowcase() {
     updateProgress();
 
     return () => {
+      observer.disconnect();
       window.removeEventListener("scroll", onScrollOrResize);
       window.removeEventListener("resize", onScrollOrResize);
       window.removeEventListener("message", onMessage);

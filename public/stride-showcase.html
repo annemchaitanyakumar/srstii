@@ -3937,8 +3937,22 @@
 
     // Main Animation Loop
     let lastFrameTime = performance.now();
+    let isPaused = false;
+
+    window.addEventListener('message', (e) => {
+      if (e.data?.type === 'STRIDE_PAUSE') {
+        isPaused = true;
+      } else if (e.data?.type === 'STRIDE_RESUME') {
+        if (isPaused) {
+          isPaused = false;
+          lastFrameTime = performance.now();
+          requestAnimationFrame(animate);
+        }
+      }
+    });
 
     function animate(now) {
+      if (isPaused) return;
       requestAnimationFrame(animate);
 
       const dt = Math.min(now - lastFrameTime, 100);
