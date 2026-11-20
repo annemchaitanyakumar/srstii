@@ -21,7 +21,7 @@ export const Route = createFileRoute("/cart")({
   component: CartPage,
 });
 
-export function CartPage() {
+function CartPage() {
   const navigate = useNavigate();
   const {
     items,
@@ -94,13 +94,13 @@ export function CartPage() {
                   {items.map((item) => (
                     <div
                       key={item.id}
-                      className="py-7 flex items-center justify-between gap-5 transition-colors"
+                      className="py-5 sm:py-7 flex items-center justify-between gap-3 sm:gap-5 transition-colors"
                     >
                       {/* Left: Circular Pedestal Thumbnail */}
                       <Link
                         to="/products/$slug"
                         params={{ slug: item.productId }}
-                        className="size-24 sm:size-28 shrink-0 rounded-full bg-white shadow-xs border border-[#1C1612]/5 p-3 flex items-center justify-center transition-transform hover:scale-105"
+                        className="size-20 sm:size-24 md:size-28 shrink-0 rounded-full bg-white shadow-xs border border-[#1C1612]/5 p-2 sm:p-3 flex items-center justify-center transition-transform hover:scale-105"
                       >
                         <img
                           src={item.image}
@@ -114,17 +114,17 @@ export function CartPage() {
                         <Link
                           to="/products/$slug"
                           params={{ slug: item.productId }}
-                          className="text-lg sm:text-xl font-medium leading-snug text-[#1C1612] hover:text-[#C88A2C] transition-colors line-clamp-1"
+                          className="text-base sm:text-lg md:text-xl font-medium leading-snug text-[#1C1612] hover:text-[#C88A2C] transition-colors line-clamp-1"
                         >
                           {item.name}
                         </Link>
-                        <p className="mt-1 text-sm text-[#6E5D4F]">
+                        <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-[#6E5D4F]">
                           Volume: {item.volume}
                         </p>
-                        <p className="text-sm text-[#6E5D4F]">
+                        <p className="text-xs sm:text-sm text-[#6E5D4F]">
                           Batch: {item.batch}
                         </p>
-                        <p className="mt-2 text-lg font-semibold text-[#1C1612]">
+                        <p className="mt-1.5 sm:mt-2 text-base sm:text-lg font-semibold text-[#1C1612]">
                           {formatINR(item.price)}
                         </p>
                       </div>
@@ -140,14 +140,14 @@ export function CartPage() {
                           <Trash2 className="size-4 stroke-[1.4]" />
                         </button>
 
-                        <div className="flex items-center gap-3 text-base text-[#1C1612] mt-4">
+                        <div className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-[#1C1612] mt-3 sm:mt-4">
                           <button
                             type="button"
                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
                             aria-label="Decrease quantity"
                             className="size-6 flex items-center justify-center rounded-full hover:bg-black/5 text-[#6E5D4F] transition-colors"
                           >
-                            <Minus className="size-3.5" />
+                            <Minus className="size-3 sm:size-3.5" />
                           </button>
                           <span className="min-w-4 text-center font-medium">
                             {item.quantity}
@@ -158,7 +158,7 @@ export function CartPage() {
                             aria-label="Increase quantity"
                             className="size-6 flex items-center justify-center rounded-full hover:bg-black/5 text-[#6E5D4F] transition-colors"
                           >
-                            <Plus className="size-3.5" />
+                            <Plus className="size-3 sm:size-3.5" />
                           </button>
                         </div>
                       </div>
@@ -293,14 +293,14 @@ export function CartPage() {
             </div>
 
             {/* Circular Pedestal Grid / Row */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 sm:gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3.5 sm:gap-6 md:gap-8">
               {popularProducts.map((prod) => (
                 <div key={prod.id} className="flex flex-col items-center text-center group">
                   {/* Circular Pedestal */}
                   <Link
                     to="/products/$slug"
                     params={{ slug: prod.id }}
-                    className="relative size-36 sm:size-44 md:size-48 rounded-full bg-white shadow-xs border border-[#1C1612]/5 p-4 flex items-center justify-center transition-all duration-300 group-hover:shadow-md group-hover:scale-105"
+                    className="relative size-28 sm:size-36 md:size-44 lg:size-48 rounded-full bg-white shadow-xs border border-[#1C1612]/5 p-3 sm:p-4 flex items-center justify-center transition-all duration-300 group-hover:shadow-md group-hover:scale-105"
                   >
                     <img
                       src={prod.image}

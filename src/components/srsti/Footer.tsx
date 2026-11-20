@@ -71,10 +71,10 @@ export function Footer() {
           SRSTI
         </motion.p>
       </div>
-      <div className="glass-panel relative z-10 mx-auto grid w-full max-w-7xl gap-10 rounded-[2rem] p-7 md:grid-cols-[1.4fr_1fr_1fr] md:p-10">
+      <div className="glass-panel relative z-10 mx-auto grid w-full max-w-7xl gap-8 sm:gap-10 rounded-[2rem] p-5 sm:p-7 md:grid-cols-[1.4fr_1fr_1fr] md:p-10">
         <div>
           <p className="eyebrow">The Harvest List</p>
-          <p className="mt-3 max-w-sm font-display text-3xl leading-tight">
+          <p className="mt-3 max-w-sm font-display text-2xl sm:text-3xl leading-tight">
             First word on each new pressing, and the farms behind it.
           </p>
           <form onSubmit={submit} className="mt-6 flex flex-col gap-3 sm:flex-row" noValidate>
@@ -93,7 +93,7 @@ export function Footer() {
               aria-describedby={error ? "newsletter-error" : undefined}
               className="min-h-12 flex-1 rounded-full border border-foreground/20 bg-transparent px-5 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-gold"
             />
-            <MagneticButton type="submit" strength={0.2}>
+            <MagneticButton type="submit" strength={0.2} className="w-full sm:w-auto">
               Subscribe <ArrowRight className="size-4" />
             </MagneticButton>
           </form>
@@ -103,27 +103,29 @@ export function Footer() {
             </p>
           )}
         </div>
-        {LINKS.map((col) => (
-          <nav key={col.title} aria-label={col.title}>
-            <p className="eyebrow">{col.title}</p>
-            <ul className="mt-4 space-y-1">
-              {col.items.map(([label, href]) => (
-                <li key={label}>
-                  <a
-                    href={href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToTarget(href);
-                    }}
-                    className="inline-flex min-h-10 items-center text-foreground/80 transition-colors hover:text-gold-ink"
-                  >
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        ))}
+        <div className="grid grid-cols-2 gap-6 md:contents">
+          {LINKS.map((col) => (
+            <nav key={col.title} aria-label={col.title}>
+              <p className="eyebrow">{col.title}</p>
+              <ul className="mt-4 space-y-1">
+                {col.items.map(([label, href]) => (
+                  <li key={label}>
+                    <a
+                      href={href}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        scrollToTarget(href);
+                      }}
+                      className="inline-flex min-h-10 items-center text-foreground/80 transition-colors hover:text-gold-ink text-sm sm:text-base"
+                    >
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))}
+        </div>
         <ul className="flex flex-wrap gap-2 md:col-span-3" aria-label="Certifications">
           {CERTS.map((c) => (
             <li

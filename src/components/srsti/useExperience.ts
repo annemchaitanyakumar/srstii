@@ -95,10 +95,17 @@ export function useExperience() {
 
     // re-measure after images and fonts settle
     const refresh = () => ScrollTrigger.refresh();
+    refresh();
+    const t1 = setTimeout(refresh, 400);
+    const t2 = setTimeout(refresh, 1200);
     window.addEventListener("load", refresh);
+    window.addEventListener("resize", refresh, { passive: true });
     document.fonts?.ready.then(refresh).catch(() => undefined);
 
     return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      window.removeEventListener("resize", refresh);
       window.removeEventListener("pointermove", onPointer);
       window.removeEventListener("pointerdown", onDown);
       window.removeEventListener("scroll", onNativeScroll);

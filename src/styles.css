@@ -194,6 +194,8 @@
     border-color: var(--color-border);
   }
   html {
+    max-width: 100%;
+    overflow-x: clip;
     background-color: var(--background);
     color-scheme: light;
     -webkit-text-size-adjust: 100%;
@@ -210,11 +212,12 @@
     scroll-behavior: auto !important;
   }
   body {
+    max-width: 100%;
+    overflow-x: clip;
     background-color: transparent;
     color: var(--color-foreground);
     font-family: var(--font-display);
     -webkit-font-smoothing: antialiased;
-    overflow-x: clip;
   }
   ::selection {
     background: var(--gold);
@@ -295,6 +298,14 @@ html.theme-fade * {
     var(--veil) 88%,
     transparent
   );
+}
+
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @utility grain {

@@ -194,24 +194,24 @@ export function Craft() {
     >
       <div ref={track} className="flex flex-col lg:h-full lg:w-max lg:flex-row lg:items-center">
         {/* intro */}
-        <div className="flex shrink-0 flex-col justify-center px-5 py-24 md:px-10 lg:h-full lg:w-[52vw] lg:py-0 lg:pl-[8vw]">
-          <p className="eyebrow mb-6">The Wood-Pressed Journey</p>
+        <div className="flex shrink-0 flex-col justify-center px-5 py-12 sm:py-16 md:py-20 md:px-10 lg:h-full lg:w-[52vw] lg:py-0 lg:pl-[8vw]">
+          <p className="eyebrow mb-4 sm:mb-6">The Wood-Pressed Journey</p>
           <SplitReveal
             as="h2"
             text="Slow is the secret ingredient."
-            className="font-display text-[clamp(2.8rem,6vw,6rem)] font-medium leading-[0.95] tracking-tight"
+            className="font-display text-[clamp(2.2rem,5.5vw,6rem)] font-medium leading-[0.98] sm:leading-[0.95] tracking-tight"
           />
           <FadeUp delay={0.2}>
-            <p className="mt-8 max-w-md text-lg leading-relaxed text-muted-foreground">
+            <p className="mt-5 sm:mt-8 max-w-md text-base sm:text-lg leading-relaxed text-muted-foreground">
               <span id="craft-title" className="sr-only">
                 The Craft
               </span>
-              <em className="font-display text-2xl not-italic text-foreground">Kachi ghani</em> —
+              <em className="font-display text-xl sm:text-2xl not-italic text-foreground">Kachi ghani</em> —
               literally “raw press” — is how India made oil for three thousand years. We never
               stopped.
             </p>
           </FadeUp>
-          <p className="mt-12 hidden items-center gap-4 text-xs uppercase tracking-[0.3em] text-muted-foreground lg:flex">
+          <p className="mt-8 sm:mt-12 hidden items-center gap-4 text-xs uppercase tracking-[0.3em] text-muted-foreground lg:flex">
             <span className="h-px w-16 bg-gold" /> Keep scrolling
           </p>
         </div>
@@ -219,10 +219,10 @@ export function Craft() {
         {STEPS.map((s) => (
           <article
             key={s.no}
-            className="grid shrink-0 items-center gap-8 px-5 pb-20 md:px-10 last:pb-6 lg:h-full lg:w-[78vw] lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:px-[4vw] lg:pb-0"
+            className="grid shrink-0 items-center gap-6 sm:gap-8 px-5 pb-14 sm:pb-20 md:px-10 last:pb-8 lg:h-full lg:w-[78vw] lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:px-[4vw] lg:pb-0"
             aria-labelledby={`step-${s.no}`}
           >
-            <div className="relative h-[62vh] min-h-[380px] overflow-hidden rounded-[2rem] shadow-glass lg:h-[72vh]">
+            <div className="relative h-[46vh] sm:h-[54vh] min-h-[280px] sm:min-h-[340px] overflow-hidden rounded-[2rem] shadow-glass lg:h-[72vh]">
               {s.product ? (
                 <div className="grain absolute inset-0 flex items-end justify-center bg-linen">
                   <img
@@ -243,14 +243,14 @@ export function Craft() {
                   loading="lazy"
                   width={1100}
                   height={1375}
-                  className="absolute inset-0 h-full w-[125%] max-w-none -translate-x-[10%] object-cover"
+                  className="absolute inset-0 size-full object-cover lg:w-[125%] lg:max-w-none lg:-translate-x-[10%]"
                 />
               )}
-              <span className="absolute left-6 top-5 font-display text-7xl italic text-primary-foreground/90 mix-blend-difference">
+              <span className="absolute left-6 top-5 font-display text-5xl sm:text-6xl md:text-7xl italic text-primary-foreground/90 mix-blend-difference">
                 {s.no}
               </span>
               {s.wheel && (
-                <div className="absolute -bottom-10 -right-10 size-48 opacity-80 lg:size-64">
+                <div className="absolute -bottom-10 -right-10 size-40 sm:size-48 opacity-80 lg:size-64">
                   <PressWheel />
                 </div>
               )}
@@ -260,7 +260,7 @@ export function Craft() {
               <p className="eyebrow">{s.kicker}</p>
               <h3
                 id={`step-${s.no}`}
-                className="mt-4 font-display text-5xl font-medium leading-none md:text-6xl"
+                className="mt-3 sm:mt-4 font-display text-3xl sm:text-5xl md:text-6xl font-medium leading-none"
               >
                 {s.title}
               </h3>

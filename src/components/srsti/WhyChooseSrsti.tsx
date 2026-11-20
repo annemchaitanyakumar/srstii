@@ -250,7 +250,7 @@ export function WhyChooseSrsti() {
         </motion.div>
 
         {/* 4 Clean Columns Grid matching reference layout */}
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8 xl:gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 xl:gap-12">
           {PILLARS.map((pillar, index) => (
             <motion.div
               key={pillar.id}
@@ -262,7 +262,7 @@ export function WhyChooseSrsti() {
                 ease: [0.22, 1, 0.36, 1],
                 delay: index * 0.1,
               }}
-              className="group flex flex-col items-center text-center px-2"
+              className="group flex flex-col items-center text-center p-6 sm:p-7 rounded-[2rem] bg-linen/50 sm:bg-transparent border border-foreground/8 sm:border-0 shadow-xs sm:shadow-none"
             >
               {/* Feature Icon */}
               <div className="mb-5 sm:mb-6 flex h-20 w-20 sm:h-22 sm:w-22 items-center justify-center transition-transform duration-300 ease-silk group-hover:scale-110">

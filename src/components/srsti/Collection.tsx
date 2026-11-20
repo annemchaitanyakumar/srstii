@@ -49,10 +49,15 @@ export function Collection() {
           </FadeUp>
         </div>
 
-        {/* Primary 5-item signature minimal grid */}
-        <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+        {/* Mobile Runway Carousel & Tablet/Desktop Multi-Column Grid */}
+        <div className="flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-4 -mx-5 px-5 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 sm:gap-5">
           {FEATURED_PRODUCTS.map((p, i) => (
-            <ProductCard key={p.id} product={p} index={i} />
+            <div
+              key={p.id}
+              className="w-[78vw] max-w-[290px] shrink-0 snap-center sm:w-auto sm:max-w-none"
+            >
+              <ProductCard product={p} index={i} />
+            </div>
           ))}
         </div>
       </div>

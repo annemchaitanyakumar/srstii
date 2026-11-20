@@ -162,42 +162,37 @@ function ProductDetailPage() {
                       ))}
                     </div>
                   )}
-
-                  {/* Quiet Editorial Provenance Strip */}
-                  <div className="w-full mt-10 pt-6 border-t border-border/40 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-display text-xs text-muted-foreground/80 text-center">
-                    <span>Origin: <strong className="font-medium text-foreground">{product.trace.region ? product.trace.region.split(",")[0] : "Single-Origin"}</strong></span>
-                    <span className="opacity-30">·</span>
-                    <span>Method: <strong className="font-medium text-foreground">{product.woodGhaniDetails.rpm} RPM {product.woodGhaniDetails.woodType}</strong></span>
-                    <span className="opacity-30">·</span>
-                    <span>Temperature: <strong className="font-medium text-foreground">&lt; 35°C Press</strong></span>
-                    <span className="opacity-30">·</span>
-                    <span>Smoke: <strong className="font-medium text-gold-ink">{product.smokePoint}</strong></span>
-                  </div>
                 </div>
               </div>
 
               {/* RIGHT COLUMN: Editorial Purchase Narrative (5 cols) */}
               <div className="lg:col-span-5">
-                <div className="lg:sticky lg:top-28 space-y-7">
+                <div className="lg:sticky lg:top-28 space-y-6">
                   {/* Title & Origin Narrative */}
                   <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-display text-[11px] uppercase tracking-[0.22em] font-medium text-gold-ink">
-                        Single-Origin Farm Reserve
+                    <div className="flex flex-wrap items-center gap-2 mb-2">
+                      <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.2em] font-semibold text-gold-ink">
+                        Single-Origin Reserve
                       </span>
                       <span className="text-muted-foreground/30">·</span>
-                      <span className="font-display text-xs text-muted-foreground">{product.trace.batch}</span>
+                      <span className="font-mono text-[10px] sm:text-xs text-muted-foreground">
+                        {product.trace.region ? product.trace.region.split(",")[0] : "Harvest 2026"}
+                      </span>
+                      <span className="text-muted-foreground/30">·</span>
+                      <span className="font-mono text-[10px] sm:text-xs text-muted-foreground">
+                        &lt; 35°C Cold Press
+                      </span>
                     </div>
 
-                    <h1 className="mt-2 font-display text-4xl sm:text-5xl lg:text-[3.25rem] font-medium leading-[1.02] tracking-[-0.02em] text-foreground">
+                    <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-medium tracking-tight text-foreground leading-[1.08]">
                       {product.name}
                     </h1>
-                    <p className="mt-1 font-display text-lg sm:text-xl italic text-muted-foreground/80">
+                    <p className="mt-1 font-display text-sm sm:text-base text-muted-foreground/75 font-light">
                       {product.regionalName}
                     </p>
 
                     {/* Rating & Review Counter */}
-                    <div className="mt-3 flex items-center gap-2.5 font-display text-xs">
+                    <div className="mt-2.5 flex items-center gap-2 text-xs">
                       <div className="flex items-center gap-0.5 text-gold">
                         {[...Array(5)].map((_, i) => (
                           <Star key={i} className="size-3.5 fill-gold text-gold" />
@@ -205,44 +200,44 @@ function ProductDetailPage() {
                       </div>
                       <span className="font-semibold text-foreground">{product.rating.score}</span>
                       <span className="text-muted-foreground/40">·</span>
-                      <a href="#reviews" className="text-muted-foreground underline hover:text-foreground transition-colors">
+                      <a href="#reviews" className="text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2">
                         {product.rating.count} harvest reviews
                       </a>
                     </div>
 
                     {/* Natural Unboxed Price */}
-                    <div className="mt-6 flex items-baseline gap-3">
-                      <span className="font-display text-4xl sm:text-5xl font-medium text-foreground">
+                    <div className="mt-4 flex items-baseline gap-3">
+                      <span className="font-display text-3xl sm:text-4xl font-semibold text-foreground">
                         {formatINR(selectedVariant.price * quantity)}
                       </span>
                       {selectedVariant.originalPrice && (
-                        <span className="font-display text-base text-muted-foreground line-through">
+                        <span className="font-display text-sm text-muted-foreground line-through">
                           {formatINR(selectedVariant.originalPrice * quantity)}
                         </span>
                       )}
-                      <span className="font-display text-xs text-muted-foreground/80">
+                      <span className="text-xs text-muted-foreground">
                         ({selectedVariant.volume} · All taxes included)
                       </span>
                     </div>
 
                     {/* Sensory Tagline */}
-                    <p className="mt-4 font-display text-base leading-relaxed text-muted-foreground/90">
+                    <p className="mt-3 text-sm sm:text-base leading-relaxed text-muted-foreground font-light max-w-xl">
                       {product.tagline}
                     </p>
                   </div>
 
-                  {/* Vessel & Volume Selection (Minimal Segmented Grid) */}
-                  <div className="space-y-3 pt-2">
-                    <div className="flex items-center justify-between font-display text-xs">
-                      <span className="uppercase tracking-[0.16em] font-medium text-muted-foreground">
-                        Select Vessel & Volume
+                  {/* Vessel & Volume Selection (Sleek Modern Pills) */}
+                  <div className="space-y-2.5 pt-2">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-mono text-[10px] uppercase tracking-[0.16em] font-medium text-muted-foreground">
+                        Select Vessel &amp; Volume
                       </span>
-                      <span className="font-medium text-foreground">
+                      <span className="text-xs font-medium text-foreground">
                         {selectedVariant.volume} · {selectedVariant.packaging}
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-2.5">
+                    <div className="flex flex-wrap items-center gap-2">
                       {product.variants.map((v) => {
                         const isSelected = selectedVariant.id === v.id;
                         return (
@@ -251,40 +246,24 @@ function ProductDetailPage() {
                             type="button"
                             onClick={() => setSelectedVariant(v)}
                             className={cn(
-                              "rounded-2xl p-3.5 text-left transition-all border cursor-pointer flex flex-col justify-between min-h-[82px]",
+                              "relative px-4 py-2.5 rounded-full font-display text-xs sm:text-sm transition-all cursor-pointer border flex items-center gap-2",
                               isSelected
-                                ? "border-primary bg-primary text-primary-foreground shadow-sm"
-                                : "border-border/70 bg-transparent text-foreground hover:border-foreground/40",
+                                ? "bg-primary text-primary-foreground border-primary shadow-xs font-semibold"
+                                : "bg-foreground/[0.03] text-foreground/80 border-foreground/15 hover:border-foreground/35 hover:bg-foreground/[0.06]",
                             )}
                           >
-                            <div className="flex items-center justify-between gap-1">
-                              <span className="font-display text-base sm:text-lg font-medium">{v.volume}</span>
-                              {v.popular && (
-                                <span
-                                  className={cn(
-                                    "rounded-full px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider",
-                                    isSelected
-                                      ? "bg-primary-foreground/20 text-primary-foreground"
-                                      : "bg-gold/15 text-gold-ink",
-                                  )}
-                                >
-                                  Popular
-                                </span>
-                              )}
-                            </div>
-                            <div className="mt-2">
-                              <div className={cn("text-xs font-medium font-display", isSelected ? "text-primary-foreground" : "text-foreground")}>
-                                {formatINR(v.price)}
-                              </div>
-                              <div
-                                className={cn(
-                                  "text-[10px] truncate mt-0.5 font-display",
-                                  isSelected ? "text-primary-foreground/75" : "text-muted-foreground",
-                                )}
-                              >
-                                {v.packaging.split(" ")[0]}
-                              </div>
-                            </div>
+                            <span>{v.volume}</span>
+                            <span className={cn("text-[11px] opacity-75", isSelected ? "text-white" : "text-muted-foreground")}>
+                              · {formatINR(v.price)}
+                            </span>
+                            {v.popular && (
+                              <span className={cn(
+                                "rounded-full px-1.5 py-0.2 text-[9px] uppercase tracking-wider font-semibold",
+                                isSelected ? "bg-white/20 text-white" : "bg-gold/20 text-gold-ink",
+                              )}>
+                                Popular
+                              </span>
+                            )}
                           </button>
                         );
                       })}
@@ -292,25 +271,25 @@ function ProductDetailPage() {
                   </div>
 
                   {/* Quantity Stepper & Add to Basket Button */}
-                  <div className="space-y-3 pt-1">
-                    <div className="flex gap-3">
+                  <div className="space-y-3 pt-2">
+                    <div className="flex items-center gap-3">
                       {/* Minimal Stepper */}
-                      <div className="inline-flex items-center rounded-full border border-border/80 bg-background px-3 py-2 shrink-0">
+                      <div className="inline-flex items-center rounded-full border border-foreground/15 bg-background px-3 py-2 shrink-0">
                         <button
                           type="button"
                           onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                          className="p-1 text-muted-foreground hover:text-foreground cursor-pointer"
+                          className="p-1 text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
                           aria-label="Decrease quantity"
                         >
                           <Minus className="size-3.5" />
                         </button>
-                        <span className="w-8 text-center font-display text-sm font-semibold text-foreground">
+                        <span className="w-7 text-center font-display text-sm font-semibold text-foreground">
                           {quantity}
                         </span>
                         <button
                           type="button"
                           onClick={() => setQuantity((q) => q + 1)}
-                          className="p-1 text-muted-foreground hover:text-foreground cursor-pointer"
+                          className="p-1 text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
                           aria-label="Increase quantity"
                         >
                           <Plus className="size-3.5" />
@@ -321,18 +300,17 @@ function ProductDetailPage() {
                       <button
                         type="button"
                         onClick={handleAddToCart}
-                        className="liquid-btn flex flex-1 items-center justify-center gap-2.5 rounded-full bg-primary px-8 py-3.5 font-display text-sm font-medium text-primary-foreground transition-all duration-300 hover:bg-gold hover:text-accent-foreground cursor-pointer shadow-md"
+                        className="flex-1 rounded-full bg-primary hover:bg-gold text-primary-foreground hover:text-accent-foreground py-3.5 px-6 font-display text-sm sm:text-base font-semibold tracking-wide transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
                       >
-                        <Droplets className="size-4" />
-                        <span>Add to Harvest Basket · {formatINR(selectedVariant.price * quantity)}</span>
+                        <Droplets className="size-4 text-gold" />
+                        <span>Add to Basket — {formatINR(selectedVariant.price * quantity)}</span>
                       </button>
                     </div>
 
                     {/* Delivery note */}
-                    <div className="flex items-center text-xs font-display text-muted-foreground/80 pt-2 border-t border-border/40">
-                      <span className="flex items-center gap-1.5">
-                        <Truck className="size-3.5 text-gold-ink" /> Free delivery on orders over ₹1,500
-                      </span>
+                    <div className="flex items-center gap-2 pt-1 text-xs text-muted-foreground font-display">
+                      <Truck className="size-3.5 text-gold-ink shrink-0" />
+                      <span>Free delivery on orders over ₹1,500 · Handcrafted small-batch pressing</span>
                     </div>
                   </div>
                 </div>

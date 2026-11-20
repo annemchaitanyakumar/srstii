@@ -1123,21 +1123,24 @@
 
       .in-head {
         left: 16px;
-        top: 84px;
+        top: 32px;
         width: 358px;
-        font-size: 40px;
+        font-size: 28px;
+        text-align: center;
+        line-height: 1.1;
+        letter-spacing: 0.03em;
       }
 
       .in-num {
         left: 0;
         width: 390px;
-        top: 250px;
-        font-size: 210px;
+        top: 220px;
+        font-size: 200px;
       }
 
       .in-bar-placeholder {
         left: 115px;
-        top: 200px;
+        top: 180px;
         width: 160px;
         height: 336px;
       }
@@ -1146,7 +1149,7 @@
         left: 0;
         width: 390px;
         top: auto;
-        bottom: 118px;
+        bottom: 112px;
         display: flex;
         justify-content: center;
         gap: 12px;
@@ -1162,7 +1165,7 @@
         right: auto;
         width: 390px;
         top: auto;
-        bottom: 80px;
+        bottom: 66px;
         font-size: 11.5px;
         text-align: center;
       }
@@ -3756,15 +3759,32 @@
       const data = STEP_DATA[stepIdx];
       inNum.textContent = data.num;
 
+      const isPhone = window.innerWidth < 820;
+
       if (stepIdx === 3) {
         const flName = FLAVOURS[activeFlavour].name.toUpperCase();
         const words = flName.split(' ');
         const hasLongWord = words.some(w => w.length > 9);
-        inHead.innerHTML = words.join('<br>');
-        inHead.style.fontSize = hasLongWord ? 'calc(88px * 0.72)' : '88px';
+        if (isPhone) {
+          inHead.innerHTML = flName;
+          inHead.style.fontSize = hasLongWord ? '22px' : '26px';
+          inHead.style.lineHeight = '1.15';
+        } else {
+          inHead.innerHTML = words.join('<br>');
+          inHead.style.fontSize = hasLongWord ? 'calc(88px * 0.72)' : '88px';
+          inHead.style.lineHeight = '0.93';
+        }
       } else {
-        inHead.innerHTML = data.head;
-        inHead.style.fontSize = '88px';
+        if (isPhone) {
+          // On mobile, keep clean single/compact line above the bottle to avoid any overlap
+          inHead.innerHTML = data.head.replace('<br>', ' ');
+          inHead.style.fontSize = '28px';
+          inHead.style.lineHeight = '1.1';
+        } else {
+          inHead.innerHTML = data.head;
+          inHead.style.fontSize = '88px';
+          inHead.style.lineHeight = '0.93';
+        }
       }
 
       inCap.innerHTML = data.cap;
@@ -3931,6 +3951,7 @@
       document.documentElement.style.setProperty('--frame-k', k);
 
       updateTitleSize(FLAVOURS[activeFlavour].name);
+      updateStepDOM(currentStep);
       updateNavHighlight(currentActiveNavTarget);
     }
     window.addEventListener('resize', onResize);

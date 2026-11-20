@@ -8,13 +8,16 @@ import saute from "@/assets/ritual-saute.webp";
 import ayurveda from "@/assets/ritual-ayurveda.webp";
 import pour from "@/assets/craft-pour.webp";
 import { setMood, type Mood } from "@/lib/srsti/scene-state";
-import { scrollToTarget } from "@/lib/srsti/smooth-scroll";
+import { scrollRef, scrollToTarget } from "@/lib/srsti/smooth-scroll";
 import { cn } from "@/lib/utils";
 import { SplitReveal } from "./motion";
 
 const RITUALS: {
   id: Mood;
+  number: string;
+  subtitle: string;
   label: string;
+  shortLabel: string;
   title: string;
   body: string;
   oil: string;
@@ -25,7 +28,10 @@ const RITUALS: {
 }[] = [
   {
     id: "drizzle",
+    number: "01",
+    subtitle: "Raw Finishing & Dressings",
     label: "Drizzle",
+    shortLabel: "Drizzle",
     title: "Finish raw, taste everything.",
     body: "Unheated, a cold-pressed oil shows its full character — peanut sweetness, coconut cream, the toastiness of til. Pour it last, over the warm or the fresh.",
     oil: "Virgin Coconut · Groundnut",
@@ -36,7 +42,10 @@ const RITUALS: {
   },
   {
     id: "saute",
+    number: "02",
+    subtitle: "The Sacred Flame & Tadka",
     label: "Sauté",
+    shortLabel: "Sauté",
     title: "The crackle of a true tadka.",
     body: "High smoke points mean mustard seeds can pop and curry leaves can blister without the oil breaking down. Bold heat, clean flavour.",
     oil: "A2 Ghee · Groundnut",
@@ -51,7 +60,10 @@ const RITUALS: {
   },
   {
     id: "ritual",
+    number: "03",
+    subtitle: "Ayurvedic Body Ritual",
     label: "Ayurvedic Ritual",
+    shortLabel: "Ayurveda",
     title: "Abhyanga, at dusk.",
     body: "Warm black sesame oil, massaged from crown to feet before a bath — the daily ritual Ayurveda prescribes for grounding Vata and nourishing skin.",
     oil: "Black Sesame",
@@ -66,7 +78,10 @@ const RITUALS: {
   },
   {
     id: "water",
+    number: "04",
+    subtitle: "Sacred Crystalline Hydration",
     label: "Living Water",
+    shortLabel: "Water",
     title: "Crystal clarity, sacred hydration.",
     body: "Sacred mountain spring water, living with natural minerals. Experience pure crystal liquid dynamics, sapphire oceanic depth, sunlit caustic shimmer, and diamond crest sparkles.",
     oil: "Spring Water · Vitality",
@@ -127,7 +142,7 @@ export function Rituals() {
       const rect = sec.getBoundingClientRect();
       const scrollTop = window.scrollY;
       const startY = scrollTop + rect.top;
-      const scrollableDistance = sec.offsetHeight - window.innerHeight;
+      const scrollableDistance = Math.max(1, sec.offsetHeight - window.innerHeight);
       const targetY = startY + ((idx + 0.5) / RITUALS.length) * scrollableDistance;
 
       scrollToTarget(targetY);
@@ -135,7 +150,7 @@ export function Rituals() {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       timeoutRef.current = setTimeout(() => {
         isManualRef.current = false;
-      }, 850);
+      }, 1200);
     }
   };
 
@@ -148,37 +163,88 @@ export function Rituals() {
     tabs.current[next]?.focus();
   };
 
-  // ScrollTrigger: Automatically step through the 4 rituals as user scrolls through this section
+  // High-performance live scroll tracker: seamlessly steps through the 4 rituals
+  // on scroll across all devices (desktop, laptop, tablet, mobile) with zero lag.
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    if (typeof window === "undefined") return;
 
-    const sec = sectionRef.current;
-    if (!sec) return;
+    let rafId = 0;
+    let isTicking = false;
 
-    const trigger = ScrollTrigger.create({
-      trigger: sec,
-      start: "top top",
-      end: "bottom bottom",
-      scrub: true,
-      onUpdate: (self) => {
-        if (isManualRef.current) return;
-        const p = self.progress;
-        // Map 0..1 progress to step 0..3
-        const idx = Math.min(RITUALS.length - 1, Math.max(0, Math.floor(p * RITUALS.length)));
-        if (idx !== activeIndexRef.current) {
-          const prevIdx = activeIndexRef.current;
-          setTravelDir(idx > prevIdx ? 1 : -1);
-          activeIndexRef.current = idx;
-          const target = RITUALS[idx]!;
-          setActive(target.id);
-          setMood(target.id);
-          triggerWaterRipple(idx);
+    const updateRitualFromScroll = () => {
+      isTicking = false;
+      const sec = sectionRef.current;
+      if (!sec || isManualRef.current) return;
+
+      const rect = sec.getBoundingClientRect();
+      const totalScrollable = rect.height - window.innerHeight;
+      if (totalScrollable <= 0) return;
+
+      // rect.top is 0 when the section top reaches top of viewport.
+      // -rect.top is the distance scrolled into the section.
+      const rawProgress = -rect.top / totalScrollable;
+      const progress = Math.max(0, Math.min(1, rawProgress));
+
+      // Map 0..1 to ritual index 0..3
+      const idx = Math.min(RITUALS.length - 1, Math.max(0, Math.floor(progress * RITUALS.length)));
+
+      if (idx !== activeIndexRef.current) {
+        const prevIdx = activeIndexRef.current;
+        setTravelDir(idx > prevIdx ? 1 : -1);
+        activeIndexRef.current = idx;
+        const target = RITUALS[idx]!;
+        setActive(target.id);
+        setMood(target.id);
+        triggerWaterRipple(idx);
+      }
+    };
+
+    const onScrollOrResize = () => {
+      if (!isTicking) {
+        isTicking = true;
+        rafId = requestAnimationFrame(updateRitualFromScroll);
+      }
+    };
+
+    const onUserCancelManual = () => {
+      isManualRef.current = false;
+    };
+
+    window.addEventListener("scroll", onScrollOrResize, { passive: true });
+    window.addEventListener("resize", onScrollOrResize, { passive: true });
+    window.addEventListener("wheel", onUserCancelManual, { passive: true });
+    window.addEventListener("touchmove", onUserCancelManual, { passive: true });
+
+    // Also attach to Lenis if active
+    let unbindLenis: (() => void) | undefined;
+    if (scrollRef.lenis) {
+      scrollRef.lenis.on("scroll", onScrollOrResize);
+      unbindLenis = () => {
+        scrollRef.lenis?.off("scroll", onScrollOrResize);
+      };
+    } else {
+      const checkInterval = setInterval(() => {
+        if (scrollRef.lenis) {
+          scrollRef.lenis.on("scroll", onScrollOrResize);
+          unbindLenis = () => {
+            scrollRef.lenis?.off("scroll", onScrollOrResize);
+          };
+          clearInterval(checkInterval);
         }
-      },
-    });
+      }, 150);
+      setTimeout(() => clearInterval(checkInterval), 2500);
+    }
+
+    // Initial check
+    updateRitualFromScroll();
 
     return () => {
-      trigger.kill();
+      window.removeEventListener("scroll", onScrollOrResize);
+      window.removeEventListener("resize", onScrollOrResize);
+      window.removeEventListener("wheel", onUserCancelManual);
+      window.removeEventListener("touchmove", onUserCancelManual);
+      cancelAnimationFrame(rafId);
+      unbindLenis?.();
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, []);
@@ -188,31 +254,31 @@ export function Rituals() {
       ref={sectionRef}
       id="rituals"
       aria-labelledby="rituals-title"
-      className="relative min-h-[360vh]"
+      className="relative min-h-[300vh] md:min-h-[320vh] lg:min-h-[340vh]"
     >
-      {/* Sticky viewport frame that holds the UI in place while user scrolls through the 4 rituals */}
-      <div className="sticky top-0 flex min-h-screen flex-col justify-center px-5 py-8 md:px-10 md:py-12">
-        <div className="mx-auto w-full max-w-7xl">
+      {/* Viewport frame: centered and proportional across mobile and desktop */}
+      <div className="sticky top-0 flex min-h-[100svh] flex-col justify-center px-4 py-3 sm:py-6 sm:px-6 md:px-8 md:py-10 lg:px-10">
+        <div className="mx-auto w-full max-w-xl md:max-w-7xl">
           {/* Section Header */}
-          <div className="mb-8 flex flex-col gap-6 md:mb-12 md:flex-row md:items-end md:justify-between">
-            <div className="rounded-3xl bg-veil p-5 md:bg-transparent md:p-0">
-              <p className="eyebrow mb-4">Culinary & Wellness Rituals</p>
-              <SplitReveal
-                as="h2"
-                text="Choose your ritual."
-                className="font-display text-[clamp(2.6rem,5.5vw,5.5rem)] font-bold leading-[0.95] tracking-tight text-foreground"
-              />
-              <span id="rituals-title" className="sr-only">
-                Rituals
-              </span>
+          <div className="mb-2.5 sm:mb-5 md:mb-6 md:flex md:items-end md:justify-between lg:mb-8">
+            <div>
+              <p className="eyebrow mb-1 text-[10px] sm:text-xs tracking-[0.2em] text-gold-ink font-semibold">
+                Culinary &amp; Wellness Rituals
+              </p>
+              <h2
+                id="rituals-title"
+                className="font-display text-xl sm:text-3xl md:text-4xl lg:text-[clamp(2.4rem,4.2vw,4.8rem)] font-bold leading-tight tracking-tight text-foreground"
+              >
+                Choose your ritual.
+              </h2>
             </div>
 
-            {/* Interactive Tab Controls with Liquid Water Droplet Highlighter */}
-            <div className="self-start md:self-auto">
+            {/* Interactive Tab Controls */}
+            <div className="mt-3 md:mt-0 w-full md:w-auto">
               <div
                 role="tablist"
                 aria-label="Ritual mood"
-                className="glass-panel relative inline-flex rounded-full p-1.5 shadow-[inset_0_1px_3px_rgba(0,0,0,0.08),0_8px_25px_-8px_rgba(0,0,0,0.12)] backdrop-blur-md"
+                className="glass-panel relative grid grid-cols-4 md:inline-flex w-full md:w-auto rounded-full p-1 sm:p-1.5 shadow-[inset_0_1px_3px_rgba(0,0,0,0.08),0_8px_25px_-8px_rgba(0,0,0,0.12)] backdrop-blur-md text-center"
               >
                 {RITUALS.map((r, i) => (
                   <button
@@ -228,7 +294,7 @@ export function Rituals() {
                     onClick={() => select(r.id, i)}
                     onKeyDown={(e) => onKey(e, i)}
                     className={cn(
-                      "relative min-h-11 rounded-full px-4 font-display text-sm uppercase tracking-[0.12em] transition-colors duration-300 md:px-5",
+                      "relative min-h-8 sm:min-h-9 md:min-h-11 rounded-full px-1.5 sm:px-3 md:px-5 font-display text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.12em] transition-colors duration-300 flex items-center justify-center text-center",
                       active === r.id
                         ? "text-white font-semibold"
                         : "text-foreground/75 hover:text-foreground",
@@ -245,7 +311,7 @@ export function Rituals() {
                           mass: 0.65,
                         }}
                       >
-                        {/* Liquid droplet body with stretch, squash & organic fluid inertia */}
+                        {/* Liquid droplet body */}
                         <motion.span
                           key={`droplet-${active}`}
                           initial={{
@@ -280,45 +346,19 @@ export function Rituals() {
                               "inset 0 1.5px 2px rgba(255, 255, 255, 0.65), inset 0 -2px 4px rgba(0, 0, 0, 0.35), 0 6px 18px -2px rgba(0, 0, 0, 0.32)",
                           }}
                         >
-                          {/* Curved liquid meniscus / glassy specular reflection */}
                           <span className="pointer-events-none absolute inset-x-2 top-0.5 h-[48%] rounded-full bg-gradient-to-b from-white/55 via-white/12 to-transparent" />
-
-                          {/* Soft bottom water refraction caustic */}
                           <span className="pointer-events-none absolute inset-x-3 bottom-0.5 h-[28%] rounded-full bg-gradient-to-t from-white/20 to-transparent blur-[0.5px]" />
-
-                          {/* Liquid wave sheen that washes across as it travels */}
-                          <motion.span
-                            key={`sheen-${active}`}
-                            initial={{ x: travelDir >= 0 ? "-120%" : "120%", opacity: 0.85 }}
-                            animate={{ x: travelDir >= 0 ? "140%" : "-140%", opacity: [0.85, 0.45, 0] }}
-                            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                            className="pointer-events-none absolute inset-y-0 w-3/5 -skew-x-12 bg-gradient-to-r from-transparent via-white/35 to-transparent"
-                          />
                         </motion.span>
-
-                        {/* Expanding water ripple ring / droplet shockwave */}
-                        <motion.span
-                          key={`ripple-${active}`}
-                          initial={{ scale: 0.85, opacity: 0.85, borderWidth: "1.5px" }}
-                          animate={{ scale: 1.4, opacity: 0, borderWidth: "0.5px" }}
-                          transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-                          className={cn(
-                            "pointer-events-none absolute -inset-0.5 rounded-full border",
-                            r.id === "saute" && "border-zinc-300/80",
-                            r.id === "ritual" && "border-amber-200/75",
-                            r.id === "drizzle" && "border-emerald-200/75",
-                            r.id === "water" && "border-cyan-200/80",
-                          )}
-                        />
                       </motion.span>
                     )}
                     <span
                       className={cn(
-                        "relative z-10 transition-all duration-300",
+                        "relative z-10 transition-all duration-300 truncate",
                         active === r.id && "drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]"
                       )}
                     >
-                      {r.label}
+                      <span className="md:hidden">{r.shortLabel}</span>
+                      <span className="hidden md:inline">{r.label}</span>
                     </span>
                   </button>
                 ))}
@@ -326,19 +366,21 @@ export function Rituals() {
             </div>
           </div>
 
-          {/* Ritual Panel Card */}
+          {/* Ritual Panel Card - Natural, self-contained luxury artifact (NO vertical stretching) */}
           <div
             id="ritual-panel"
             role="tabpanel"
             aria-labelledby={`tab-${active}`}
             className={cn(
-              "glass-panel grid max-h-[78vh] overflow-hidden rounded-[2rem] shadow-lg transition-colors duration-700 md:grid-cols-2",
-              active === "saute" && "border-zinc-400/30",
-              active === "ritual" && "border-[#7c4428]/35",
+              "glass-panel overflow-hidden rounded-[1.75rem] sm:rounded-[2rem] border shadow-2xl transition-all duration-700 md:grid md:grid-cols-2",
+              active === "saute" && "border-zinc-400/35",
+              active === "ritual" && "border-[#7c4428]/40",
+              active === "drizzle" && "border-emerald-600/30",
+              active === "water" && "border-cyan-600/30",
             )}
           >
-            {/* Left: Image with crossfade */}
-            <div className="relative aspect-[4/3] overflow-hidden md:aspect-auto md:min-h-[480px]">
+            {/* Image Banner: Natural proportional aspect ratio on mobile, full column on desktop */}
+            <div className="relative aspect-[16/9] sm:aspect-[16/9] md:aspect-auto md:min-h-[460px] overflow-hidden">
               <AnimatePresence mode="popLayout" initial={false}>
                 <motion.img
                   key={current.id}
@@ -356,48 +398,58 @@ export function Rituals() {
               </AnimatePresence>
             </div>
 
-            {/* Right: Content details */}
+            {/* Editorial Content: Tight, cohesive luxury spacing */}
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={current.id}
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                className="flex flex-col justify-center overflow-y-auto p-6 md:p-10 lg:p-12"
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                className="flex flex-col justify-center p-4 sm:p-6 md:p-8 lg:p-10"
               >
-                <h3 className="font-display text-3xl font-bold leading-[1.02] text-foreground md:text-4xl lg:text-5xl">
-                  {current.title}
-                </h3>
-                <p className="mt-4 font-display text-base leading-relaxed text-foreground/80 md:mt-5 md:text-lg">
-                  {current.body}
-                </p>
-                <ol className="mt-6 space-y-2.5 font-display md:space-y-3">
-                  {current.steps.map((s, i) => (
-                    <li key={s} className="flex items-baseline gap-3 text-base text-foreground/90 md:text-lg">
-                      <span className={cn(
-                        "font-display text-sm font-semibold transition-colors duration-500",
-                        current.id === "saute" && "text-zinc-500",
-                        current.id === "ritual" && "text-[#8c5332]",
-                        current.id === "drizzle" && "text-emerald-700",
-                        current.id === "water" && "text-cyan-700",
-                      )}>
-                        0{i + 1}
-                      </span>
-                      <span>{s}</span>
-                    </li>
-                  ))}
-                </ol>
-                <dl className="mt-8 grid grid-cols-2 gap-4 border-t border-foreground/10 pt-5 md:gap-6">
+                <div>
+                  <h3 className="font-display text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold leading-tight text-foreground">
+                    {current.title}
+                  </h3>
+                  <p className="mt-1.5 sm:mt-2 font-display text-xs sm:text-sm md:text-base leading-relaxed text-foreground/80 font-light">
+                    {current.body}
+                  </p>
+
+                  {/* Clean Editorial Typographic List (NO pill buttons / survey boxes) */}
+                  <ol className="mt-3 sm:mt-5 space-y-1.5 sm:space-y-2 font-display">
+                    {current.steps.map((s, i) => (
+                      <li key={s} className="flex items-baseline gap-2.5 sm:gap-3 text-xs sm:text-sm md:text-base text-foreground/90">
+                        <span className={cn(
+                          "font-display text-xs sm:text-sm font-semibold tracking-wider transition-colors duration-500",
+                          current.id === "saute" && "text-zinc-500",
+                          current.id === "ritual" && "text-[#8c5332]",
+                          current.id === "drizzle" && "text-emerald-700",
+                          current.id === "water" && "text-cyan-700",
+                        )}>
+                          0{i + 1}
+                        </span>
+                        <span>{s}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+
+                {/* Specs: Anchored directly below step 03 with an elegant hairline divider */}
+                <dl className="mt-3.5 sm:mt-6 grid grid-cols-2 gap-3 sm:gap-4 border-t border-foreground/10 pt-3 sm:pt-4 md:gap-6 md:pt-5">
                   <div>
-                    <dt className="eyebrow">[ Best with ]</dt>
-                    <dd className="mt-1 font-display text-lg font-semibold text-foreground md:text-xl">
+                    <dt className="eyebrow text-[9px] sm:text-xs tracking-[0.2em] text-gold-ink font-semibold">
+                      [ Best with ]
+                    </dt>
+                    <dd className="mt-0.5 sm:mt-1 font-display text-xs sm:text-base md:text-lg font-semibold text-foreground">
                       {current.oil}
                     </dd>
                   </div>
                   <div>
-                    <dt className="eyebrow">[ Temperature ]</dt>
-                    <dd className="mt-1 font-display text-lg font-semibold text-foreground md:text-xl">
+                    <dt className="eyebrow text-[9px] sm:text-xs tracking-[0.2em] text-gold-ink font-semibold">
+                      [ Temperature ]
+                    </dt>
+                    <dd className="mt-0.5 sm:mt-1 font-display text-xs sm:text-base md:text-lg font-semibold text-foreground">
                       {current.temp}
                     </dd>
                   </div>

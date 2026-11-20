@@ -159,7 +159,7 @@ export function StrideShowcase() {
       aria-label="Interactive 3D Artisanal Oil Showcase"
       className="relative w-full h-[400vh] bg-transparent"
     >
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-transparent">
+      <div className="sticky top-0 h-[100dvh] w-full overflow-hidden bg-transparent">
         <iframe
           ref={iframeRef}
           src="/stride-showcase.html"
