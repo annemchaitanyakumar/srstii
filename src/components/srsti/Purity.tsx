@@ -1,12 +1,22 @@
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { AlertTriangle, Check, ChevronRight, Droplets, Flame, Leaf, ShieldCheck, Sparkles, ThermometerSnowflake } from "lucide-react";
-import { useState } from "react";
+import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { AlertTriangle, Check, Leaf, ShieldCheck, Sparkles, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 import farm from "@/assets/purity-farm.webp";
 import refinery from "@/assets/purity-refinery.webp";
 import { cn } from "@/lib/utils";
 import { Counter, FadeUp, SplitReveal } from "./motion";
 
+// Original Editorial Table Data for PC / Desktop
+const COMPARE = [
+  ["Extraction heat", "Under 35°C", "200–270°C"],
+  ["Chemical solvents", "None", "Hexane"],
+  ["Bleaching & deodorising", "Never", "Clay, steam, caustic soda"],
+  ["Natural aroma & colour", "Intact", "Stripped"],
+  ["Farm traceability", "Every batch", "Blended, untraceable"],
+];
+
+// Forensic Pillars for Mobile Cards
 interface PurityPillar {
   id: string;
   number: string;
@@ -124,60 +134,177 @@ const PURITY_PILLARS: PurityPillar[] = [
 ];
 
 export function Purity() {
-  const [activeWorld, setActiveWorld] = useState<"srsti" | "refined">("srsti");
-  const [viewMode, setViewMode] = useState<"interactive" | "side-by-side">("side-by-side");
+  const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [activeWorld, setActiveWorld] = useState<"srsti" | "refined">("srsti");
+
+  useEffect(() => {
+    const q = window.matchMedia("(min-width: 1024px)");
+    setIsDesktop(q.matches);
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    q.addEventListener("change", handler);
+    return () => q.removeEventListener("change", handler);
+  }, []);
+
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const k = reduce || !isDesktop ? 0 : 1;
+  const ySlow = useTransform(scrollYProgress, [0, 1], [60 * k, -60 * k]);
+  const yFast = useTransform(scrollYProgress, [0, 1], [180 * k, -180 * k]);
+  const yMid = useTransform(scrollYProgress, [0, 1], [110 * k, -110 * k]);
+  const imgScale = useTransform(scrollYProgress, [0, 1], [1.15, 1]);
 
   return (
     <section
+      ref={ref}
       id="purity"
       aria-labelledby="purity-title"
-      className="relative bg-veil px-4 pt-10 pb-20 sm:px-6 md:px-10 md:pt-16 md:pb-32 overflow-hidden"
+      className="relative bg-veil px-4 pt-8 pb-20 sm:px-6 md:px-10 md:pt-12 md:pb-32 overflow-hidden"
     >
-      {/* Background ambient lighting */}
-      <div className="pointer-events-none absolute -top-40 right-10 size-96 rounded-full bg-gold/5 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-40 left-10 size-96 rounded-full bg-emerald-950/5 blur-3xl" />
-
       <div className="mx-auto max-w-7xl">
-        {/* Section Header */}
-        <div className="mb-10 max-w-3xl md:mb-16">
-          <div className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-3 py-1 backdrop-blur-md mb-4 sm:mb-5">
-            <Sparkles className="size-3.5 text-gold-ink animate-pulse" />
-            <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.2em] text-gold-ink font-semibold">
-              Forensic Purity &amp; Traceability
+        {/* =========================================================================
+            1. PC / DESKTOP VIEW (Original Editorial Layout with Parallax & Table)
+           ========================================================================= */}
+        <div className="hidden lg:grid lg:grid-cols-12 lg:gap-8">
+          <div className="lg:col-span-5 lg:pt-10">
+            <p className="eyebrow mb-5">Purity & Traceability</p>
+            <SplitReveal
+              as="h2"
+              text="What we leave out matters most."
+              className="font-display text-[clamp(2.6rem,5vw,5rem)] font-medium leading-[0.95] tracking-tight"
+            />
+            <span id="purity-title" className="sr-only">
+              Purity and traceability
             </span>
+            <FadeUp delay={0.15}>
+              <p className="mt-8 max-w-md text-lg leading-relaxed text-muted-foreground font-light">
+                Supermarket oil is pressed hot, washed in solvent, bleached and steamed until it has
+                no smell, no colour — and no story. Ours keeps all three.
+              </p>
+            </FadeUp>
           </div>
 
-          <SplitReveal
-            as="h2"
-            text="What we leave out matters most."
-            className="font-display text-[clamp(2.4rem,5vw,5rem)] font-medium leading-[0.96] tracking-tight text-foreground"
-          />
-          <span id="purity-title" className="sr-only">
-            Purity and traceability
-          </span>
+          <motion.figure style={{ y: ySlow }} className="relative lg:col-span-7">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] shadow-glass md:aspect-[5/4] lg:aspect-[4/5]">
+              <motion.img
+                style={{ scale: imgScale }}
+                src={farm}
+                alt="A farmer holding freshly harvested groundnuts above red soil at golden hour"
+                loading="lazy"
+                width={1100}
+                height={1375}
+                className="absolute inset-0 size-full object-cover"
+              />
+            </div>
+            <figcaption className="glass-panel absolute bottom-5 left-5 right-5 rounded-2xl p-4 text-sm md:right-auto md:max-w-xs">
+              <span className="eyebrow">SRSTI</span>
+              <p className="mt-1">
+                Single-origin harvest, Anantapur. Pressed within 21 days of pulling from the soil.
+              </p>
+            </figcaption>
+          </motion.figure>
 
-          <FadeUp delay={0.15}>
-            <p className="mt-5 max-w-2xl text-base sm:text-lg leading-relaxed text-muted-foreground font-light">
-              Supermarket oil is heated past 200°C, washed in neurotoxic hexane, bleached with industrial clays, and steamed until it has no smell, no colour — and no biological story. Ours keeps all three.
-            </p>
-          </FadeUp>
+          <motion.figure
+            style={{ y: yFast }}
+            className="relative lg:col-span-4 lg:col-start-2 lg:-mt-40"
+          >
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem]">
+              <img
+                src={refinery}
+                alt="A sterile industrial oil refinery with steel tanks"
+                loading="lazy"
+                width={1100}
+                height={825}
+                className="absolute inset-0 size-full object-cover grayscale"
+              />
+            </div>
+            <figcaption className="mt-3 text-sm text-muted-foreground">
+              Industrial refined oil — heated, solvent-washed, bleached.
+            </figcaption>
+          </motion.figure>
+
+          <motion.div style={{ y: yMid }} className="lg:col-span-6 lg:col-start-7 lg:mt-16">
+            {/* Unified Editorial Comparison Table for PC */}
+            <div className="glass-panel overflow-hidden rounded-3xl p-6 md:p-8 shadow-xs border border-foreground/10">
+              <div className="mb-4 flex items-center justify-between border-b border-foreground/10 pb-3">
+                <span className="eyebrow text-xs">Purity Comparison</span>
+                <span className="font-display text-xs text-muted-foreground">Certified 20+ Lab Tests</span>
+              </div>
+              <div className="w-full overflow-x-auto no-scrollbar">
+                <table className="w-full text-left border-collapse text-sm md:text-base">
+                  <caption className="sr-only">SRSTI compared with industrial refined oils</caption>
+                  <thead>
+                    <tr className="border-b border-foreground/15">
+                      <th scope="col" className="py-3 pr-2 font-display text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground w-[38%]">
+                        Specification
+                      </th>
+                      <th scope="col" className="py-3 px-2 font-display text-base md:text-lg font-bold text-foreground w-[32%]">
+                        SRSTI
+                      </th>
+                      <th scope="col" className="py-3 pl-2 font-display text-base md:text-lg font-medium text-muted-foreground/75 w-[30%]">
+                        Refined
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-foreground/10">
+                    {COMPARE.map(([attr, srsti, refined]) => (
+                      <tr key={attr} className="transition-colors hover:bg-foreground/[0.02]">
+                        <th scope="row" className="py-3.5 pr-2 font-normal text-foreground/80 font-display text-xs md:text-sm">
+                          {attr}
+                        </th>
+                        <td className="py-3.5 px-2 font-display text-xs md:text-sm font-semibold text-foreground">
+                          <span className="inline-flex items-center gap-1.5 text-emerald-800 dark:text-emerald-400">
+                            <Check className="size-3.5 shrink-0 text-gold-ink stroke-[2.5]" aria-hidden />
+                            <span>{srsti}</span>
+                          </span>
+                        </td>
+                        <td className="py-3.5 pl-2 font-display text-xs md:text-sm text-muted-foreground/75">
+                          <span className="inline-flex items-center gap-1.5">
+                            <X className="size-3.5 shrink-0 text-muted-foreground/50 stroke-[2]" aria-hidden />
+                            <span>{refined}</span>
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </motion.div>
         </div>
 
-        {/* Mobile & Tablet Interactive Mode Switcher */}
-        <div className="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 lg:hidden">
-          <div className="flex w-full rounded-full bg-foreground/[0.06] p-1 border border-foreground/10 backdrop-blur-md">
+        {/* =========================================================================
+            2. MOBILE VIEW (Touch-Optimized Dossier Cards with Zero Table Overflow)
+           ========================================================================= */}
+        <div className="block lg:hidden">
+          {/* Mobile Header */}
+          <div className="mb-8">
+            <p className="eyebrow mb-3">Purity & Traceability</p>
+            <SplitReveal
+              as="h2"
+              text="What we leave out matters most."
+              className="font-display text-[clamp(2.2rem,6vw,3.2rem)] font-medium leading-[0.98] tracking-tight text-foreground"
+            />
+            <FadeUp delay={0.1}>
+              <p className="mt-4 text-base leading-relaxed text-muted-foreground font-light">
+                Supermarket oil is heated past 200°C, washed in solvent, bleached and steamed until it has no smell, no colour — and no story. Ours keeps all three.
+              </p>
+            </FadeUp>
+          </div>
+
+          {/* Mobile World Switcher */}
+          <div className="mb-6 flex rounded-full bg-foreground/[0.06] p-1 border border-foreground/10 backdrop-blur-md">
             <button
               type="button"
               onClick={() => setActiveWorld("srsti")}
               className={cn(
-                "relative flex-1 rounded-full py-2 px-3 text-center font-display text-xs sm:text-sm uppercase tracking-[0.12em] transition-colors duration-300 flex items-center justify-center gap-1.5",
+                "relative flex-1 rounded-full py-2.5 px-3 text-center font-display text-xs uppercase tracking-[0.12em] transition-colors duration-300 flex items-center justify-center gap-1.5",
                 activeWorld === "srsti" ? "text-white font-semibold" : "text-foreground/70 hover:text-foreground"
               )}
             >
               {activeWorld === "srsti" && (
                 <motion.span
-                  layoutId="purity-world-pill"
+                  layoutId="purity-world-pill-mobile"
                   className="absolute inset-0 rounded-full bg-gradient-to-r from-[#1b3324] to-[#122419] shadow-md z-0"
                   transition={{ type: "spring", stiffness: 350, damping: 28 }}
                 />
@@ -192,13 +319,13 @@ export function Purity() {
               type="button"
               onClick={() => setActiveWorld("refined")}
               className={cn(
-                "relative flex-1 rounded-full py-2 px-3 text-center font-display text-xs sm:text-sm uppercase tracking-[0.12em] transition-colors duration-300 flex items-center justify-center gap-1.5",
+                "relative flex-1 rounded-full py-2.5 px-3 text-center font-display text-xs uppercase tracking-[0.12em] transition-colors duration-300 flex items-center justify-center gap-1.5",
                 activeWorld === "refined" ? "text-white font-semibold" : "text-foreground/70 hover:text-foreground"
               )}
             >
               {activeWorld === "refined" && (
                 <motion.span
-                  layoutId="purity-world-pill"
+                  layoutId="purity-world-pill-mobile"
                   className="absolute inset-0 rounded-full bg-gradient-to-r from-[#383d42] to-[#25282c] shadow-md z-0"
                   transition={{ type: "spring", stiffness: 350, damping: 28 }}
                 />
@@ -209,24 +336,20 @@ export function Purity() {
               </span>
             </button>
           </div>
-        </div>
 
-        {/* =========================================================================
-            1. MOBILE VIEW: Interactive Single-World Immersive Dossier (Zero Tables!)
-           ========================================================================= */}
-        <div className="block lg:hidden">
+          {/* Mobile Single-World Active Card */}
           <AnimatePresence mode="wait">
             {activeWorld === "srsti" ? (
               <motion.div
                 key="mobile-srsti"
-                initial={{ opacity: 0, y: 12 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.35 }}
-                className="overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#131f17] via-[#0d1610] to-[#070d09] text-[#f7f5ed] border border-[#3b5243]/50 shadow-2xl p-5 sm:p-7"
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.28 }}
+                className="overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#131f17] via-[#0d1610] to-[#070d09] text-[#f7f5ed] border border-[#3b5243]/50 shadow-2xl p-5 sm:p-6"
               >
                 {/* Visual Artifact Header */}
-                <div className="relative mb-6 overflow-hidden rounded-2xl aspect-[16/10] border border-white/10 shadow-inner">
+                <div className="relative mb-5 overflow-hidden rounded-2xl aspect-[16/10] border border-white/10 shadow-inner">
                   <img
                     src={farm}
                     alt="Farmer holding native groundnut harvest at golden hour"
@@ -235,307 +358,146 @@ export function Purity() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
                   <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs">
                     <span className="font-mono uppercase tracking-widest text-gold text-[10px] font-semibold">
-                      Anantapur &amp; Tamil Nadu Single-Origin
+                      Anantapur Native Seeds · Vaagai Ghani
                     </span>
                     <span className="rounded-full bg-black/60 px-2 py-0.5 text-[9px] uppercase tracking-wider text-white/90 backdrop-blur-md">
-                      Harvest 2026
+                      &lt; 35°C
                     </span>
                   </div>
                 </div>
 
-                <div className="mb-5 flex items-center justify-between border-b border-white/10 pb-4">
-                  <div>
-                    <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-gold font-medium">
-                      The Living Standard
-                    </span>
-                    <h3 className="font-display text-2xl font-normal text-white">
-                      Cold-Pressed Artisanal Reserve
-                    </h3>
-                  </div>
-                  <div className="rounded-full bg-gold/15 p-2 text-gold">
-                    <ShieldCheck className="size-5" />
-                  </div>
+                <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-gold font-medium">
+                    The SRSTI Standard
+                  </span>
+                  <span className="font-mono text-[10px] text-gold/80">Certified 0.0% Chemicals</span>
                 </div>
 
-                {/* 5 Sculptural Spec Cards */}
-                <div className="space-y-4">
+                {/* Mobile Cards List */}
+                <div className="space-y-3">
                   {PURITY_PILLARS.map((pillar) => (
                     <div
                       key={pillar.id}
-                      className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-sm transition-all"
+                      className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-sm"
                     >
-                      <div className="flex items-baseline justify-between mb-1.5">
-                        <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-white/50">
+                      <div className="flex items-baseline justify-between mb-1">
+                        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/50">
                           {pillar.number} · {pillar.label}
                         </span>
-                        <span className="font-mono text-[10px] uppercase tracking-wider text-gold font-medium">
+                        <span className="rounded-full bg-gold/10 border border-gold/20 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-gold font-medium">
                           {pillar.srsti.tag}
                         </span>
                       </div>
 
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-display text-lg font-medium text-white">
+                      <div className="flex items-center justify-between gap-2">
+                        <h4 className="font-display text-base font-medium text-white">
                           {pillar.srsti.headline}
                         </h4>
-                        <span className="font-display text-xl font-bold text-gold">
+                        <span className="font-display text-xl font-bold text-gold shrink-0">
                           {pillar.srsti.metric}
                         </span>
                       </div>
 
-                      <p className="mt-2 text-xs leading-relaxed text-white/75 font-light">
+                      <p className="mt-1.5 text-xs leading-relaxed text-white/75 font-light">
                         {pillar.srsti.description}
                       </p>
                     </div>
                   ))}
                 </div>
+
+                <div className="mt-5 flex items-center gap-2.5 border-t border-white/10 pt-4 text-xs text-white/60">
+                  <ShieldCheck className="size-4 text-gold shrink-0" />
+                  <span>Tested for 20+ chemical adulterants by NABL accredited laboratories.</span>
+                </div>
               </motion.div>
             ) : (
               <motion.div
                 key="mobile-refined"
-                initial={{ opacity: 0, y: 12 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.35 }}
-                className="overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#1e2023] via-[#16181a] to-[#0f1012] text-[#f7f5ed] border border-zinc-700/50 shadow-2xl p-5 sm:p-7"
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.28 }}
+                className="overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#1a1c1f] via-[#141517] to-[#0d0e10] text-[#f7f5ed] border border-zinc-700/50 shadow-2xl p-5 sm:p-6"
               >
                 {/* Visual Artifact Header */}
-                <div className="relative mb-6 overflow-hidden rounded-2xl aspect-[16/10] border border-white/10 shadow-inner">
+                <div className="relative mb-5 overflow-hidden rounded-2xl aspect-[16/10] border border-white/10 shadow-inner">
                   <img
                     src={refinery}
-                    alt="Sterile industrial refinery tanks"
+                    alt="Industrial oil refinery plant"
                     className="size-full object-cover grayscale"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
                   <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs">
-                    <span className="font-mono uppercase tracking-widest text-zinc-400 text-[10px] font-semibold">
-                      Industrial Solvent Extraction Facility
+                    <span className="font-mono uppercase tracking-widest text-zinc-300 text-[10px] font-semibold">
+                      Industrial Solvent Extraction Plant
                     </span>
-                    <span className="rounded-full bg-red-950/80 px-2 py-0.5 text-[9px] uppercase tracking-wider text-red-200 border border-red-800/40 backdrop-blur-md">
-                      Commercial Standard
+                    <span className="rounded-full bg-red-950/60 border border-red-800/40 px-2 py-0.5 text-[9px] uppercase tracking-wider text-red-300 backdrop-blur-md">
+                      200°C–270°C
                     </span>
                   </div>
                 </div>
 
-                <div className="mb-5 flex items-center justify-between border-b border-white/10 pb-4">
-                  <div>
-                    <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-400 font-medium">
-                      The Industrial Norm
-                    </span>
-                    <h3 className="font-display text-2xl font-normal text-white">
-                      Supermarket Refined Commodity
-                    </h3>
-                  </div>
-                  <div className="rounded-full bg-red-900/25 p-2 text-red-400">
-                    <AlertTriangle className="size-5" />
-                  </div>
+                <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-red-300 font-medium">
+                    Supermarket Industry Norm
+                  </span>
+                  <span className="font-mono text-[10px] text-zinc-400">Heated · Bleached · Deodorised</span>
                 </div>
 
-                {/* 5 Sculptural Spec Cards */}
-                <div className="space-y-4">
+                {/* Mobile Cards List */}
+                <div className="space-y-3">
                   {PURITY_PILLARS.map((pillar) => (
                     <div
                       key={pillar.id}
-                      className="rounded-2xl border border-zinc-800 bg-white/[0.02] p-4 backdrop-blur-sm transition-all"
+                      className="rounded-2xl border border-zinc-800 bg-white/[0.02] p-4 backdrop-blur-sm"
                     >
-                      <div className="flex items-baseline justify-between mb-1.5">
-                        <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">
+                      <div className="flex items-baseline justify-between mb-1">
+                        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-500">
                           {pillar.number} · {pillar.label}
                         </span>
-                        <span className="font-mono text-[10px] uppercase tracking-wider text-red-300 font-medium">
+                        <span className="rounded-full bg-zinc-800/60 border border-zinc-700 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-red-300 font-medium">
                           {pillar.refined.tag}
                         </span>
                       </div>
 
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-display text-lg font-medium text-zinc-200">
+                      <div className="flex items-center justify-between gap-2">
+                        <h4 className="font-display text-base font-medium text-zinc-200">
                           {pillar.refined.headline}
                         </h4>
-                        <span className="font-display text-xl font-bold text-zinc-400 line-through decoration-red-400/60">
+                        <span className="font-display text-lg font-bold text-zinc-400 line-through decoration-red-400/60 shrink-0">
                           {pillar.refined.metric}
                         </span>
                       </div>
 
-                      <p className="mt-2 text-xs leading-relaxed text-zinc-400 font-light">
+                      <p className="mt-1.5 text-xs leading-relaxed text-zinc-400 font-light">
                         {pillar.refined.description}
                       </p>
                     </div>
                   ))}
+                </div>
+
+                <div className="mt-5 flex items-center gap-2.5 border-t border-white/10 pt-4 text-xs text-zinc-400">
+                  <AlertTriangle className="size-4 text-amber-400 shrink-0" />
+                  <span>High heat processing strips volatile aromatics, requiring synthetic antioxidants.</span>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* =========================================================================
-            2. DESKTOP VIEW: Dual-World Architectural Confrontation (Side-by-Side)
-           ========================================================================= */}
-        <div className="hidden lg:grid lg:grid-cols-2 gap-8 items-stretch">
-          {/* LEFT: The SRSTI Living Standard */}
-          <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-[#142219] via-[#0d1711] to-[#070d0a] text-[#f7f5ed] border border-[#3b5243]/60 p-8 xl:p-10 shadow-2xl flex flex-col justify-between">
-            {/* Ambient golden fluid glow */}
-            <div className="pointer-events-none absolute -right-20 -top-20 size-72 rounded-full bg-gold/15 blur-3xl" />
-
-            <div>
-              {/* Header Badge */}
-              <div className="flex items-center justify-between border-b border-white/10 pb-5">
-                <div className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/15 px-3 py-1 backdrop-blur-md">
-                  <span className="size-2 rounded-full bg-gold animate-pulse" />
-                  <span className="font-mono text-xs uppercase tracking-[0.2em] text-gold font-semibold">
-                    The SRSTI Way · Living Cold Press
-                  </span>
-                </div>
-                <span className="font-mono text-xs text-gold/80">Certified 0.0% Chemicals</span>
-              </div>
-
-              {/* Visual Artifact Window */}
-              <div className="relative my-6 overflow-hidden rounded-2xl aspect-[16/9] border border-white/15 shadow-inner group">
-                <img
-                  src={farm}
-                  alt="A farmer holding freshly harvested groundnuts above red soil at golden hour"
-                  className="size-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs">
-                  <span className="font-display text-sm font-medium text-white">
-                    Anantapur Native Seeds · Vaagai &amp; Neem Ghani
-                  </span>
-                  <span className="rounded-full bg-gold/20 border border-gold/30 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-gold">
-                    &lt; 35°C
-                  </span>
-                </div>
-              </div>
-
-              {/* 5 Architectural Forensic Spec Cards */}
-              <div className="space-y-4">
-                {PURITY_PILLARS.map((pillar) => (
-                  <div
-                    key={pillar.id}
-                    className="group rounded-2xl border border-white/10 bg-white/[0.04] p-4.5 backdrop-blur-sm transition-all hover:border-gold/30 hover:bg-white/[0.06]"
-                  >
-                    <div className="flex items-baseline justify-between mb-1.5">
-                      <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/50">
-                        {pillar.number} · {pillar.label}
-                      </span>
-                      <span className="rounded-full bg-gold/10 border border-gold/20 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-gold font-medium">
-                        {pillar.srsti.tag}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <h4 className="font-display text-lg font-medium text-white group-hover:text-gold transition-colors">
-                        {pillar.srsti.headline}
-                      </h4>
-                      <span className="font-display text-2xl font-bold text-gold">
-                        {pillar.srsti.metric}
-                      </span>
-                    </div>
-
-                    <p className="mt-2 text-xs leading-relaxed text-white/75 font-light">
-                      {pillar.srsti.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Bottom Seal */}
-            <div className="mt-6 flex items-center gap-3 border-t border-white/10 pt-5 text-xs text-white/60">
-              <ShieldCheck className="size-4 text-gold shrink-0" />
-              <span>Tested for 20+ chemical adulterants by independent NABL accredited laboratories.</span>
-            </div>
-          </div>
-
-          {/* RIGHT: The Industrial Commodity Standard */}
-          <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-[#1a1c1f] via-[#141517] to-[#0d0e10] text-[#f7f5ed] border border-zinc-700/60 p-8 xl:p-10 shadow-2xl flex flex-col justify-between">
-            {/* Ambient subtle warning glow */}
-            <div className="pointer-events-none absolute -left-20 -bottom-20 size-72 rounded-full bg-red-950/20 blur-3xl" />
-
-            <div>
-              {/* Header Badge */}
-              <div className="flex items-center justify-between border-b border-white/10 pb-5">
-                <div className="inline-flex items-center gap-2 rounded-full border border-red-800/40 bg-red-950/30 px-3 py-1 backdrop-blur-md">
-                  <AlertTriangle className="size-3.5 text-amber-400" />
-                  <span className="font-mono text-xs uppercase tracking-[0.2em] text-zinc-300 font-semibold">
-                    Supermarket Industry Norm · Refined
-                  </span>
-                </div>
-                <span className="font-mono text-xs text-zinc-400">Heated · Bleached · Deodorised</span>
-              </div>
-
-              {/* Visual Artifact Window */}
-              <div className="relative my-6 overflow-hidden rounded-2xl aspect-[16/9] border border-white/10 shadow-inner group">
-                <img
-                  src={refinery}
-                  alt="Industrial oil refinery with steel tanks and chimney stacks"
-                  className="size-full object-cover grayscale transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs">
-                  <span className="font-display text-sm font-medium text-zinc-300">
-                    Industrial Solvent Fractionation Plant
-                  </span>
-                  <span className="rounded-full bg-red-900/30 border border-red-700/40 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-red-300">
-                    200°C–270°C
-                  </span>
-                </div>
-              </div>
-
-              {/* 5 Architectural Contrast Spec Cards */}
-              <div className="space-y-4">
-                {PURITY_PILLARS.map((pillar) => (
-                  <div
-                    key={pillar.id}
-                    className="group rounded-2xl border border-zinc-800 bg-white/[0.02] p-4.5 backdrop-blur-sm transition-all hover:border-zinc-700 hover:bg-white/[0.04]"
-                  >
-                    <div className="flex items-baseline justify-between mb-1.5">
-                      <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-zinc-500">
-                        {pillar.number} · {pillar.label}
-                      </span>
-                      <span className="rounded-full bg-zinc-800/60 border border-zinc-700 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-red-300 font-medium">
-                        {pillar.refined.tag}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <h4 className="font-display text-lg font-medium text-zinc-200">
-                        {pillar.refined.headline}
-                      </h4>
-                      <span className="font-display text-2xl font-bold text-zinc-400 line-through decoration-red-400/60">
-                        {pillar.refined.metric}
-                      </span>
-                    </div>
-
-                    <p className="mt-2 text-xs leading-relaxed text-zinc-400 font-light">
-                      {pillar.refined.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Bottom Caution */}
-            <div className="mt-6 flex items-center gap-3 border-t border-white/10 pt-5 text-xs text-zinc-400">
-              <AlertTriangle className="size-4 text-amber-400 shrink-0" />
-              <span>High heat processing strips volatile aromatics, requiring synthetic antioxidants (TBHQ).</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Animated Numerical Metrics Counter Strip */}
-        <dl className="mt-16 sm:mt-24 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-foreground/10 pt-10 sm:pt-14 lg:grid-cols-4">
+        {/* Animated Numerical Metrics Counter Strip (Shared across both) */}
+        <dl className="mt-20 sm:mt-28 grid grid-cols-2 gap-x-4 sm:gap-x-6 gap-y-10 sm:gap-y-12 border-t border-foreground/10 pt-10 sm:pt-12 lg:grid-cols-4">
           {[
-            { to: 0, suffix: "%", label: "Chemical solvents, hexane or synthetic additives" },
-            { to: 35, prefix: "<", suffix: "°C", label: "Neem wood ghani cold extraction ceiling" },
-            { to: 100, suffix: "%", label: "Verifiable single-origin farm harvest batches" },
-            { to: 14, label: "Generational partner family farms" },
+            { to: 0, suffix: "%", label: "Solvents, bleach or additives" },
+            { to: 35, prefix: "<", suffix: "°C", label: "Cold extraction ceiling" },
+            { to: 100, suffix: "%", label: "Traceable farm batches" },
+            { to: 14, label: "Partner family farms" },
           ].map((c) => (
             <div key={c.label}>
-              <dd className="font-display text-[clamp(2.4rem,5vw,5rem)] font-medium leading-none text-gold-gradient">
+              <dd className="font-display text-[clamp(2.2rem,5.5vw,5.5rem)] font-medium leading-none text-gold-gradient">
                 <Counter to={c.to} prefix={c.prefix} suffix={c.suffix} />
               </dd>
-              <dt className="mt-3 max-w-[15rem] font-display text-xs sm:text-sm text-muted-foreground leading-snug">
-                {c.label}
-              </dt>
+              <dt className="mt-2 sm:mt-3 max-w-[14rem] text-xs sm:text-sm text-muted-foreground">{c.label}</dt>
             </div>
           ))}
         </dl>
